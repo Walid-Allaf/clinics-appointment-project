@@ -1,3 +1,5 @@
+import { StaticImageData } from "next/image";
+
 export type LinksPosition = "header" | "drawer";
 
 export type SpecialtiesItem = {
@@ -18,5 +20,5 @@ export type statistic = {
 export type Branches = {
   title: string;
   description: string;
-  image: string;
+  image: StaticImageData;
 };
