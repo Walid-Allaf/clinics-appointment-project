@@ -11,9 +11,9 @@ export { default as SPECIALTYCARDVECTOR } from "./icons/specialty-card-vector.sv
 // IMAGES
 export { default as HEROIMAGE } from "./images/hero-image.svg";
 
-export { default as BRANCH1 } from "./images/Branch-1.svg";
-export { default as BRANCH2 } from "./images/Branch-2.svg";
-export { default as BRANCH3 } from "./images/Branch-3.svg";
-export { default as BRANCH4 } from "./images/Branch-4.svg";
+export { default as BRANCH1 } from "./images/Branch-1.png";
+export { default as BRANCH2 } from "./images/Branch-2.png";
+export { default as BRANCH3 } from "./images/Branch-3.png";
+export { default as BRANCH4 } from "./images/Branch-4.png";
 
 export { default as portraitSmilingMaleDoctor } from "./images/portrait-smiling-male-doctor.svg";
