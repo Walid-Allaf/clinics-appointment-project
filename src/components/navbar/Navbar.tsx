@@ -9,6 +9,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { Links } from "./Links";
+import SpecialButton from "../common/SpecialButton";
 
 interface Props {
   /**
@@ -57,11 +58,12 @@ export default function DrawerAppBar(props: Props) {
           <Typography
             variant="h6"
             component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+            sx={{ flexGrow: 1 /* display: { xs: "none", sm: "block" } */ }}
           >
             Logo
           </Typography>
           <Links position="header" />
+          <SpecialButton label="Book Now" size="sm" />
         </Toolbar>
       </AppBar>
 

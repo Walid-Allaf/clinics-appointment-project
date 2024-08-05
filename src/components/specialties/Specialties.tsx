@@ -1,4 +1,4 @@
-import { SpecialtiesItems } from "@/src/constants/SpecialtiesItems";
+import { SpecialtiesItems } from "@/src/constants";
 import { Box, Typography } from "@mui/material";
 import SpecialtyCard from "./SpecialtyCard";
 

@@ -30,3 +30,36 @@ a {
   text-decoration: none;
   color: initial;
 }
+
+.custom-swiper .swiper {
+  display: flex !important;
+  flex-direction: column-reverse !important;
+  height: 550px !important;
+}
+.custom-swiper .navigation-buttons {
+  width: inherit;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+}
+.custom-swiper .arrow {
+  background-color: #004b71;
+  border-radius: 50%;
+}
+.custom-swiper .swiper-pagination-bullet {
+  width: 15px;
+  height: 15px;
+  border: 3px solid #004b71 !important;
+  background-color: #fff;
+  opacity: 1;
+}
+.custom-swiper .swiper-pagination-bullet-active {
+  background-color: #004b71;
+}
+.swiper-horizontal > .swiper-pagination-bullets,
+.swiper-pagination-bullets.swiper-pagination-horizontal {
+  width: initial !important;
+}

@@ -10,7 +10,7 @@ export const Links = (props: { position: LinksPosition }) => {
       sx={{
         display: {
           xs: position == "header" ? "none" : "flex",
-          sm: position == "header" ? "flex" : "none",
+          md: position == "header" ? "flex" : "none",
         },
         flexDirection: position == "header" ? "row" : "column",
         justifyContent: position == "header" ? "space-between" : "center",

@@ -1,6 +1,7 @@
 import { CHECK } from "@/src/assets";
 import { Box, Typography, List, ListItem, ListItemText, Button } from "@mui/material";
 import Image from "next/image";
+import SpecialButton from "../common/SpecialButton";
 
 export default function Welcome() {
   const Features = [
@@ -31,7 +32,7 @@ export default function Welcome() {
       </Typography>
       <Typography
         sx={{
-          fontSize: { xs: "28px", md: "36px" },
+          fontSize: { xs: "28px", md: "32px", lg: "36px" },
           fontWeight: 600,
           lineHeight: { xs: "38px", md: "45px" },
           // textWrap: { md: "nowrap" },
@@ -60,13 +61,13 @@ export default function Welcome() {
               sx={{ display: "flex", gap: 1, alignItems: "center" }}
             >
               <Image src={CHECK} alt="check-icon" width={26} height={26} />
-              <ListItemText primary={item} sx={{ textWrap: "nowrap", color: "#3FBDE6" }} />
+              <ListItemText primary={item} sx={{ textWrap: { md: "nowrap" }, color: "#3FBDE6" }} />
             </ListItem>
           ))}
         </List>
       </Box>
 
-      <Button sx={{ p: "14px 70px 14px 70px", alignSelf: "flex-start" }}>Book Now</Button>
+      <SpecialButton label="Book Now" size="lg" />
     </Box>
   );
 }

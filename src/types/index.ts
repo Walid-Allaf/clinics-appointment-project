@@ -7,3 +7,16 @@ export type SpecialtiesItem = {
   height: number;
   icon: string;
 };
+
+export type statistic = {
+  title: string;
+  start: number;
+  number: number;
+  timer?: number;
+};
+
+export type Branches = {
+  title: string;
+  description: string;
+  image: string;
+};

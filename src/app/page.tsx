@@ -1,8 +1,15 @@
 import { Box } from "@mui/material";
-import { Specialties, Welcome } from "../components";
+import {
+  ClinicOverview,
+  IncreasingNumbers,
+  OurBranches,
+  Specialties,
+  Welcome,
+} from "../components";
 import Image from "next/image";
 import { HEROIMAGE } from "../assets";
 import "./globals.css";
+import { Branches } from "../constants";
 
 export default function Home() {
   return (
@@ -28,7 +35,7 @@ export default function Home() {
           <Box
             sx={{
               flex: 1.5,
-              display: { xs: "none", md: "flex" },
+              display: { xs: "none", lg: "flex" },
               alignItems: "center",
               width: "1129px",
               height: "921px",
@@ -41,6 +48,15 @@ export default function Home() {
 
       {/* *** Specialties *** */}
       <Specialties />
+
+      {/* *** Increasing numbers *** */}
+      <IncreasingNumbers />
+
+      {/* *** Our Clinic Branches *** */}
+      <OurBranches slides={Branches} />
+
+      {/* *** Clinic Overview *** */}
+      <ClinicOverview />
     </Box>
   );
 }
