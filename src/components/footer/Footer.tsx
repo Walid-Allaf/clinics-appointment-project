@@ -9,7 +9,7 @@ export default async function Footer({ locale }: any) {
 
   return (
     <Box sx={{ backgroundColor: "#004B71", color: "#fff", py: 4 }}>
-      <Container maxWidth="md">
+      <Container maxWidth="lg">
         <Grid
           container
           spacing={4}
