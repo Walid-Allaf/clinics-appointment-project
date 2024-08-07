@@ -10,6 +10,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { Links } from "./Links";
 import SpecialButton from "../common/SpecialButton";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   /**
@@ -21,8 +22,9 @@ interface Props {
 
 const drawerWidth = 240;
 
-export default function DrawerAppBar(props: Props) {
-  const { window } = props;
+export default function DrawerAppBar({ window, locale }: any) {
+  // const { window, locale } = props;
+  const { t } = useTranslation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
@@ -45,25 +47,25 @@ export default function DrawerAppBar(props: Props) {
     <Box sx={{ display: "flex" }}>
       {/* *** NAV IN COMPUTER *** */}
       <AppBar component="nav">
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1 /* display: { xs: "none", sm: "block" } */ }}
-          >
-            Logo
-          </Typography>
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ display: { md: "none" } }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" component="div">
+              Logo
+            </Typography>
+          </Box>
           <Links position="header" />
-          <SpecialButton label="Book Now" size="sm" />
+          <Box sx={{ display: { xs: "none", sm: "block" } }}>
+            <SpecialButton label={t("bookNow")} size="sm" locale={locale} />
+          </Box>
         </Toolbar>
       </AppBar>
 
@@ -78,7 +80,7 @@ export default function DrawerAppBar(props: Props) {
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: "block", sm: "none" },
+            display: { xs: "block", md: "none" },
             "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
           }}
         >

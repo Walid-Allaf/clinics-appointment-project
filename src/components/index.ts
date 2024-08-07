@@ -13,4 +13,11 @@ export { default as BranchesSlider } from "./our-branches/BranchesSlider";
 
 export { default as ClinicOverview } from "./clinic-overview/ClinicOverview";
 
+export { default as MedicalTeam } from "./medical-team/MedicalTeam";
+export { default as TeamMemberCard } from "./medical-team/TeamMemberCard";
+export { default as MedicalTeamSlider } from "./medical-team/MedicalTeamSlider";
+
 export { default as SpecialButton } from "./common/SpecialButton";
+export { default as LanguageChanger } from "./common/LanguageChanger";
+
+export { default as Footer } from "./footer/Footer";

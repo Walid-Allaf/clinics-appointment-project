@@ -10,8 +10,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import BranchCard from "./BranchCard";
 
-export default function BranchesSlider(props: { slides: Array<Branches> }) {
-  const { slides } = props;
+export default function BranchesSlider(props: { slides: Array<Branches>; locale: any }) {
+  const { slides, locale } = props;
 
   return (
     <Box
@@ -59,6 +59,7 @@ export default function BranchesSlider(props: { slides: Array<Branches> }) {
                     title={item.title}
                     description={item.description}
                     image={item.image}
+                    locale={locale}
                   />
                 </SwiperSlide>
               ))
@@ -68,11 +69,19 @@ export default function BranchesSlider(props: { slides: Array<Branches> }) {
         {/* *** CONTROLES *** */}
         <div className="navigation-buttons">
           <button className="arrow-left arrow">
-            <ArrowBackIcon sx={{ color: "#fff" }} />
+            {locale == "en" ? (
+              <ArrowBackIcon sx={{ color: "#fff" }} />
+            ) : (
+              <ArrowForwardIcon sx={{ color: "#fff" }} />
+            )}
           </button>
           <div className="swiper-custom-pagination" />
           <button className="arrow-right arrow">
-            <ArrowForwardIcon sx={{ color: "#fff" }} />
+            {locale == "en" ? (
+              <ArrowForwardIcon sx={{ color: "#fff" }} />
+            ) : (
+              <ArrowBackIcon sx={{ color: "#fff" }} />
+            )}
           </button>
         </div>
       </Box>

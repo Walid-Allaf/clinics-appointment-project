@@ -1,24 +1,25 @@
-// Import necessary components from Material-UI
 import React from "react";
 import { Box, Typography, Container, Grid } from "@mui/material";
 import Image from "next/image";
 import { portraitSmilingMaleDoctor } from "@/src/assets";
+import initTranslations from "@/src/app/i18n";
 
-export default function ClinicOverview() {
+export default async function ClinicOverview({ locale }: any) {
+  const { t } = await initTranslations(locale, ["quick-overview"]);
   return (
     <Box
       sx={{
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#004B71", // Background color
-        py: 6, // Padding Y-axis
-        color: "white", // Text color
+        backgroundColor: "#004B71",
+        py: 6,
+        color: "white",
         position: "relative",
       }}
     >
       <Container>
-        <Grid container spacing={4} alignItems="center">
+        <Grid container spacing={4} maxWidth="100%" alignItems="center" minHeight={500}>
           <Grid item xs={12} md={6}>
             <Box
               component={Image}
@@ -27,8 +28,14 @@ export default function ClinicOverview() {
               sx={{
                 position: "absolute",
                 bottom: 0,
-                left: { xs: "50%", md: 0 },
-                transform: { xs: "translatex(-50%)", md: "none" },
+                "&:dir(ltr)": {
+                  left: { xs: "50%", md: 0 },
+                  transform: { xs: "translatex(-50%)", md: "none" },
+                },
+                "&:dir(rtl)": {
+                  right: { xs: "50%", md: 0 },
+                  transform: { xs: "translatex(50%) scaleX(-1)", md: "scaleX(-1)" },
+                },
                 maxWidth: { xs: "320px", sm: "700px", md: "800px", lg: "1000px" },
               }}
             />
@@ -45,7 +52,7 @@ export default function ClinicOverview() {
                 lineHeight: "50px",
               }}
             >
-              A quick overview of our clinic
+              {t("title")}
             </Typography>
             <Box
               sx={{
@@ -58,17 +65,9 @@ export default function ClinicOverview() {
               }}
             >
               <Typography variant="body1" paragraph>
-                At our clinics, we are committed to providing top-quality healthcare using the
-                latest medical equipment and advanced treatment technologies. We take pride in our
-                team of highly experienced specialists who deliver comprehensive healthcare services
-                to our patients.
+                {t("description1")}
               </Typography>
-              <Typography variant="body1">
-                Whether you need a medical consultation, routine check-up, or specialized treatment,
-                our clinics offer a comfortable and safe environment to meet all your healthcare
-                needs. We continuously strive to achieve the highest standards of quality and
-                excellence in healthcare to ensure your comfort and complete satisfaction.
-              </Typography>
+              <Typography variant="body1">{t("description2")}</Typography>
             </Box>
           </Grid>
         </Grid>

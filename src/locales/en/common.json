@@ -1,0 +1,20 @@
+{
+  "viewProfile": "View Profile",
+  "viewMore": "View More",
+  "bookNow": "Book Now",
+  "clinics": "Clinics in the country",
+  "expert": "Expert doctors",
+  "patients": "Patients Served",
+  "appointments": "Appointments Booked",
+  "home": "Home",
+  "specialties": "Specialties",
+  "doctorsInformation": "Doctors Information",
+  "aboutUs": "About Us",
+  "landing": {
+    "welcome": "Welcome to [site name]",
+    "title": "Start your health journey with us today! With the [site name]",
+    "feature1": "A wide network of doctors and clinics",
+    "feature2": "Easy search and booking",
+    "feature3": "Trusted patient experiences"
+  }
+}

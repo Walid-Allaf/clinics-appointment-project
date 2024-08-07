@@ -2,16 +2,19 @@ import { Box } from "@mui/material";
 import {
   ClinicOverview,
   IncreasingNumbers,
+  MedicalTeam,
   OurBranches,
   Specialties,
   Welcome,
-} from "../components";
+} from "../../components";
 import Image from "next/image";
-import { HEROIMAGE } from "../assets";
-import "./globals.css";
-import { Branches } from "../constants";
+import { HEROIMAGE } from "../../assets";
+import "../globals.css";
+import { Branches } from "../../constants";
+import initTranslations from "../i18n";
 
-export default function Home() {
+export default async function Home({ params: { locale } }: any) {
+  const { t } = await initTranslations(locale, ["home"]);
   return (
     <Box>
       {/* *** LANDING *** */}
@@ -31,7 +34,7 @@ export default function Home() {
             mt: { md: 2 },
           }}
         >
-          <Welcome />
+          <Welcome locale={locale} />
           <Box
             sx={{
               flex: 1.5,
@@ -47,16 +50,19 @@ export default function Home() {
       </Box>
 
       {/* *** Specialties *** */}
-      <Specialties />
+      <Specialties locale={locale} />
 
       {/* *** Increasing numbers *** */}
       <IncreasingNumbers />
 
       {/* *** Our Clinic Branches *** */}
-      <OurBranches slides={Branches} />
+      <OurBranches slides={Branches} locale={locale} />
 
       {/* *** Clinic Overview *** */}
-      <ClinicOverview />
+      <ClinicOverview locale={locale} />
+
+      {/* *** Medical Team *** */}
+      <MedicalTeam locale={locale} />
     </Box>
   );
 }

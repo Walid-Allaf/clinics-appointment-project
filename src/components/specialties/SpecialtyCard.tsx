@@ -3,11 +3,14 @@ import Image from "next/image";
 import { SPECIALTYCARDVECTOR } from "@/src/assets";
 import { Box, Typography } from "@mui/material";
 import { SpecialtiesItem } from "@/src/types";
+import initTranslations from "@/src/app/i18n";
 
-export default function SpecialtyCard(props: { item: SpecialtiesItem }) {
+export default async function SpecialtyCard(props: { item: SpecialtiesItem; locale: any }) {
   const {
     item: { text, icon, path, width, height },
+    locale,
   } = props;
+  const { t } = await initTranslations(locale, ["specialties"]);
   return (
     <Box
       component={Link}
@@ -56,7 +59,7 @@ export default function SpecialtyCard(props: { item: SpecialtiesItem }) {
           <Typography
             sx={{ fontSize: "24px", fontWeight: 500, lineHeight: "29.26px", color: "#fff" }}
           >
-            {text}
+            {t(text)}
           </Typography>
         </Box>
       </Box>

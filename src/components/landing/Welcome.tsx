@@ -1,14 +1,13 @@
+"use client";
 import { CHECK } from "@/src/assets";
 import { Box, Typography, List, ListItem, ListItemText, Button } from "@mui/material";
 import Image from "next/image";
 import SpecialButton from "../common/SpecialButton";
+import { useTranslation } from "react-i18next";
 
-export default function Welcome() {
-  const Features = [
-    "A wide network of doctors and clinics",
-    "Easy search and booking",
-    "Trusted patient experiences",
-  ];
+export default function Welcome({ locale }: any) {
+  const { t } = useTranslation();
+  const Features = ["feature1", "feature2", "feature3"];
 
   return (
     <Box
@@ -28,7 +27,7 @@ export default function Welcome() {
           lineHeight: "25px",
         }}
       >
-        Welcome to [site name]
+        {t("landing.welcome")}
       </Typography>
       <Typography
         sx={{
@@ -38,10 +37,9 @@ export default function Welcome() {
           // textWrap: { md: "nowrap" },
         }}
       >
-        Start your health journey with us today!
-        <br /> With the [site name]
+        {t("landing.title")}
       </Typography>
-      <Typography
+      {/* <Typography
         sx={{
           fontWeight: 500,
           lineHeight: "19.36px",
@@ -50,7 +48,7 @@ export default function Welcome() {
         We connect you with the best doctors and clinics in your area.
         <br /> Whether you need a dentist, pediatrician, or cardiologist, <br />
         ou r platform makes booking appointments easy and reliable.
-      </Typography>
+      </Typography> */}
 
       <Box>
         <List sx={{}}>
@@ -61,13 +59,16 @@ export default function Welcome() {
               sx={{ display: "flex", gap: 1, alignItems: "center" }}
             >
               <Image src={CHECK} alt="check-icon" width={26} height={26} />
-              <ListItemText primary={item} sx={{ textWrap: { md: "nowrap" }, color: "#3FBDE6" }} />
+              <ListItemText
+                primary={t(`landing.${item}`)}
+                sx={{ textWrap: { md: "nowrap" }, color: "#3FBDE6", textAlign: "start" }}
+              />
             </ListItem>
           ))}
         </List>
       </Box>
 
-      <SpecialButton label="Book Now" size="lg" />
+      <SpecialButton label={t("bookNow")} size="lg" locale={locale} />
     </Box>
   );
 }

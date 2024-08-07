@@ -1,6 +1,6 @@
 "use client";
 import { Lexend } from "next/font/google";
-import { createTheme, PaletteColorOptions } from "@mui/material/styles";
+import { createTheme } from "@mui/material/styles";
 
 const lexend = Lexend({
   weight: ["300", "400", "500", "700"],
@@ -8,23 +8,9 @@ const lexend = Lexend({
   display: "swap",
 });
 
-// declare module "@mui/material/styles" {
-//   interface Palette {
-//     whiteColor: PaletteColorOptions;
-//   }
-//   interface PaletteOptions {
-//     whiteColor: PaletteColorOptions;
-//   }
-// }
-
-// declare module "@mui/icons-material/ArrowForward" {
-//   interface htmlColor {
-//     whiteColor: PaletteColorOptions;
-//   }
-// }
-
 const { palette } = createTheme();
-const theme = createTheme({
+const ltr_theme = createTheme({
+  direction: "ltr",
   palette: {
     primary: {
       main: "#004B71",
@@ -32,14 +18,11 @@ const theme = createTheme({
     secondary: {
       main: "#3FBDE6",
     },
-    // whiteColor: palette.augmentColor({
-    //   color: {
-    //     main: "#FFFFFF",
-    //   },
-    // }),
   },
   typography: {
-    fontFamily: lexend.style.fontFamily,
+    allVariants: {
+      fontFamily: lexend.style.fontFamily,
+    },
   },
   components: {
     MuiButton: {
@@ -56,4 +39,4 @@ const theme = createTheme({
   },
 });
 
-export default theme;
+export default ltr_theme;

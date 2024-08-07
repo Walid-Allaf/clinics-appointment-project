@@ -1,7 +1,7 @@
 export const NavItems = [
-  { text: "Home", path: "#" },
-  { text: "Clinics", path: "#" },
-  { text: "Specialties", path: "#" },
-  { text: "Doctors information", path: "#" },
-  { text: "About Us", path: "#" },
+  { text: "home", path: "#" },
+  { text: "clinics", path: "#" },
+  { text: "specialties", path: "#" },
+  { text: "doctorsInformation", path: "#" },
+  { text: "aboutUs", path: "#" },
 ];

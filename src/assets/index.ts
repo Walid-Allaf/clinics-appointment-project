@@ -8,6 +8,11 @@ export { default as TOOTH } from "./icons/tooth.svg";
 export { default as SKINMAN } from "./icons/skin-man.svg";
 export { default as SPECIALTYCARDVECTOR } from "./icons/specialty-card-vector.svg";
 
+export { default as SPECIALTYIMAGE1 } from "./icons/specialtyImage-1.svg";
+export { default as SPECIALTYIMAGE2 } from "./icons/specialtyImage-2.svg";
+export { default as SPECIALTYIMAGE3 } from "./icons/specialtyImage-3.svg";
+export { default as SPECIALTYIMAGE4 } from "./icons/specialtyImage-4.svg";
+
 // IMAGES
 export { default as HEROIMAGE } from "./images/hero-image.svg";
 
@@ -17,3 +22,4 @@ export { default as BRANCH3 } from "./images/Branch-3.png";
 export { default as BRANCH4 } from "./images/Branch-4.png";
 
 export { default as portraitSmilingMaleDoctor } from "./images/portrait-smiling-male-doctor.svg";
+export { default as TEAMMEMBER1 } from "./images/team-member-1.png";

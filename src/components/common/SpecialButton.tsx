@@ -1,9 +1,14 @@
 import Button from "@mui/material/Button";
-import PropTypes from "prop-types";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-export default function SpecialButton(props: { label: string; size: "lg" | "sm"; width?: string }) {
-  const { label, size, width } = props;
+export default function SpecialButton(props: {
+  label: string;
+  size: "lg" | "sm";
+  width?: string;
+  locale: any;
+}) {
+  const { label, size, width, locale } = props;
   return (
     <Button
       sx={{
@@ -20,7 +25,7 @@ export default function SpecialButton(props: { label: string; size: "lg" | "sm";
       }}
     >
       <span>{label}</span>
-      <ArrowForwardIcon />
+      {locale == "en" ? <ArrowForwardIcon /> : <ArrowBackIcon />}
     </Button>
   );
 }

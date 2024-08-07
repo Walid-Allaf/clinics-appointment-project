@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+xl: 1920px(extra large)
+lg: 1280px(large)
+md: 960px(medium)
+sm: 600px(small)
+xs: 0px(extra small)
+*/
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -31,12 +39,12 @@ a {
   color: initial;
 }
 
-.custom-swiper .swiper {
+.swiper {
   display: flex !important;
   flex-direction: column-reverse !important;
   height: 550px !important;
 }
-.custom-swiper .navigation-buttons {
+.navigation-buttons {
   width: inherit;
   display: flex;
   gap: 15px;
@@ -45,21 +53,27 @@ a {
   position: relative;
   z-index: 10;
 }
-.custom-swiper .arrow {
+.arrow {
   background-color: #004b71;
   border-radius: 50%;
 }
-.custom-swiper .swiper-pagination-bullet {
+.swiper-pagination-bullet {
   width: 15px;
   height: 15px;
   border: 3px solid #004b71 !important;
-  background-color: #fff;
-  opacity: 1;
+  background-color: #fff !important;
+  opacity: 1 !important;
 }
-.custom-swiper .swiper-pagination-bullet-active {
-  background-color: #004b71;
+.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  background-color: #004b71 !important;
 }
 .swiper-horizontal > .swiper-pagination-bullets,
 .swiper-pagination-bullets.swiper-pagination-horizontal {
   width: initial !important;
+}
+
+.custom-swiper-team .swiper {
+  display: flex !important;
+  flex-direction: column-reverse !important;
+  height: 830px !important;
 }

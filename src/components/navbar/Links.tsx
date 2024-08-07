@@ -2,9 +2,11 @@ import { NavItems } from "@/src/constants";
 import { LinksPosition } from "@/src/types";
 import { List, ListItem, ListItemText } from "@mui/material";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 export const Links = (props: { position: LinksPosition }) => {
   const { position } = props;
+  const { t } = useTranslation();
   return (
     <List
       sx={{
@@ -22,7 +24,7 @@ export const Links = (props: { position: LinksPosition }) => {
         <ListItem key={item.text} sx={{ p: 2 }} disablePadding>
           <Link href={item.path}>
             <ListItemText
-              primary={item.text}
+              primary={t(item.text)}
               sx={{ textWrap: "nowrap", color: position == "header" ? "#fff" : "primary" }}
             />
           </Link>

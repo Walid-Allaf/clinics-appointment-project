@@ -4,8 +4,10 @@ import { Box, Typography } from "@mui/material";
 import NumberItem from "./NumberItem";
 import { statistic } from "@/src/types";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function IncreasingNumbers() {
+  const { t } = useTranslation();
   const sectionRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
@@ -44,7 +46,9 @@ export default function IncreasingNumbers() {
         {isVisible &&
           Statistics.map((statistic: statistic, index) => {
             const { title, number, timer, start } = statistic;
-            return <NumberItem key={index} start={0} title={title} number={number} timer={timer} />;
+            return (
+              <NumberItem key={index} start={0} title={t(title)} number={number} timer={timer} />
+            );
           })}
       </Box>
     </Box>

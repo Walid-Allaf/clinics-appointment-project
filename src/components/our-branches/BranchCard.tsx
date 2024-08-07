@@ -1,10 +1,13 @@
+"use client";
 import Image from "next/image";
 import { Box, Typography, Stack } from "@mui/material";
 import SpecialButton from "../common/SpecialButton";
 import { Branches } from "@/src/types";
+import { useTranslation } from "react-i18next";
 
 export default function BranchCard(props: Branches) {
-  const { title, description, image } = props;
+  const { title, description, image, locale } = props;
+  const { t } = useTranslation();
 
   return (
     <Stack
@@ -39,7 +42,7 @@ export default function BranchCard(props: Branches) {
       <Typography color="#fff" sx={{ fontSize: "14px", lineHeight: "17.5px", mb: 1 }}>
         {description}
       </Typography>
-      <SpecialButton label="view more" size="lg" width="100%" />
+      <SpecialButton label={t("viewMore")} size="lg" width="100%" locale={locale} />
     </Stack>
   );
 }
