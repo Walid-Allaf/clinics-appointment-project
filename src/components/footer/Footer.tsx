@@ -3,6 +3,7 @@ import { Facebook, Twitter, Instagram } from "@mui/icons-material";
 import { Locations, QuickLinks } from "@/src/constants";
 import LanguageChanger from "../common/LanguageChanger";
 import initTranslations from "@/src/app/i18n";
+import { Logo } from "..";
 
 export default async function Footer({ locale }: any) {
   const { t } = await initTranslations(locale, ["footer"]);
@@ -16,24 +17,26 @@ export default async function Footer({ locale }: any) {
           justifyContent="space-between"
           maxWidth="100%"
           sx={{
+            textAlign: { xs: "center", sm: "start" },
             "& h6": {
               fontSize: "22px",
               fontWeight: 500,
               lineHeight: "22px",
-              mb: 3,
-              maxWidth: "max-content",
+              my: 3,
+              // maxWidth: "max-content",
             },
           }}
         >
           <Grid item xs={12} md={4}>
-            <Typography gutterBottom sx={{ fontSize: "32px", fontWeight: 600, lineHeight: "48px" }}>
-              Logo
-            </Typography>
+            <Box sx={{ display: "flex", justifyContent: { xs: "center", sm: "flex-start" } }}>
+              <Logo locale={locale} />
+            </Box>
+
             <Typography variant="body2" sx={{ fontSize: "24px", lineHeight: "38px" }}>
               {t("description")}
             </Typography>
             <Box sx={{ mt: 2 }}>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h6" gutterBottom color="secondary">
                 {t("followUs")}
               </Typography>
               <IconButton color="inherit" href="#">
@@ -47,8 +50,8 @@ export default async function Footer({ locale }: any) {
               </IconButton>
             </Box>
           </Grid>
-          <Grid item xs={12} md={2} sx={{ "& a": { mb: 2 } }}>
-            <Typography variant="h6" gutterBottom>
+          <Grid item xs={12} sm={6} md={2} sx={{ "& a": { mb: 2 } }}>
+            <Typography variant="h6" gutterBottom color="secondary">
               {t("quickLinks")}
             </Typography>
             {QuickLinks.map((link, index) => (
@@ -59,7 +62,7 @@ export default async function Footer({ locale }: any) {
                 underline="hover"
                 display="block"
                 sx={{
-                  maxWidth: "max-content",
+                  // maxWidth: "max-content",
                   transition: ".3s ease-in-out",
                   "&:hover": {
                     paddingLeft: 2,
@@ -71,8 +74,8 @@ export default async function Footer({ locale }: any) {
             ))}
             <LanguageChanger />
           </Grid>
-          <Grid item xs={12} md={3}>
-            <Typography variant="h6" gutterBottom>
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography variant="h6" gutterBottom color="secondary">
               {t("locations")}
             </Typography>
             <List

@@ -2,7 +2,7 @@
 import { CHECK } from "@/src/assets";
 import { Box, Typography, List, ListItem, ListItemText, Button } from "@mui/material";
 import Image from "next/image";
-import SpecialButton from "../common/SpecialButton";
+import { SpecialLink } from "..";
 import { useTranslation } from "react-i18next";
 
 export default function Welcome({ locale }: any) {
@@ -18,6 +18,7 @@ export default function Welcome({ locale }: any) {
         flexDirection: "column",
         gap: 3,
         flex: 1,
+        textAlign: { xs: "center", md: "start" },
       }}
     >
       <Typography
@@ -56,19 +57,34 @@ export default function Welcome({ locale }: any) {
             <ListItem
               key={item}
               disablePadding
-              sx={{ display: "flex", gap: 1, alignItems: "center" }}
+              sx={{ display: "flex", gap: 2, alignItems: "center" }}
             >
-              <Image src={CHECK} alt="check-icon" width={26} height={26} />
+              <Box sx={{ display: { xs: "none", md: "block" } }}>
+                <Image src={CHECK} alt="check-icon" width={26} height={26} />
+              </Box>
               <ListItemText
                 primary={t(`landing.${item}`)}
-                sx={{ textWrap: { md: "nowrap" }, color: "#3FBDE6", textAlign: "start" }}
+                sx={{
+                  textWrap: { md: "nowrap" },
+                  color: "#fff",
+                  fontSize: "18px",
+                  textAlign: { xs: "center", md: "start" },
+                }}
               />
             </ListItem>
           ))}
         </List>
       </Box>
 
-      <SpecialButton label={t("bookNow")} size="lg" locale={locale} />
+      <Box sx={{ alignSelf: { xs: "center", md: "start" } }}>
+        <SpecialLink
+          label={t("bookNow")}
+          size="lg"
+          color="#fff"
+          width="max-content"
+          locale={locale}
+        />
+      </Box>
     </Box>
   );
 }

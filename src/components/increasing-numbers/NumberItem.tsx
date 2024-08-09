@@ -1,6 +1,6 @@
 "use client";
 import { statistic } from "@/src/types";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Divider } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 
 export default function NumberItem(props: statistic) {
@@ -27,6 +27,7 @@ export default function NumberItem(props: statistic) {
   return (
     <>
       <Box
+        className="boxx"
         sx={{
           flex: 1,
           display: "flex",
@@ -45,11 +46,7 @@ export default function NumberItem(props: statistic) {
           {title}
         </Typography>
       </Box>
-      <Box
-        // component={"span"}
-        className="divider"
-        sx={{ width: "1px", height: "75px" }}
-      ></Box>
+      <Box className="divider" sx={{ width: "1px", height: "75px" }}></Box>
     </>
   );
 }

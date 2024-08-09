@@ -23,6 +23,7 @@ export default async function Home({ params: { locale } }: any) {
           background: "linear-gradient(181.27deg, #007291 -37.39%, #004B71 112.37%);",
           maxWidth: "100%",
           paddingX: { xs: 4, md: 8 },
+          paddingTop: { xs: 8, md: 0 },
         }}
       >
         <Box
@@ -30,7 +31,12 @@ export default async function Home({ params: { locale } }: any) {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            height: "calc(100vh - 80px)",
+            flexDirection: { xs: "column", md: "row" },
+            minHeight: {
+              xs: "calc(100vh - 80px)",
+              md: "calc(100vh - 320px)",
+              lg: "calc(100vh - 80px)",
+            },
             mt: { md: 2 },
           }}
         >
@@ -38,10 +44,10 @@ export default async function Home({ params: { locale } }: any) {
           <Box
             sx={{
               flex: 1.5,
-              display: { xs: "none", lg: "flex" },
+              display: "flex",
               alignItems: "center",
-              width: "1129px",
-              height: "921px",
+              position: "relative",
+              bottom: { xs: -15, sm: 0 },
             }}
           >
             <Image src={HEROIMAGE} alt="hero-image" objectFit="cover" />

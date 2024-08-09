@@ -13,7 +13,7 @@ export default async function ClinicOverview({ locale }: any) {
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#004B71",
-        py: 6,
+        py: { xs: 4, md: 0, lg: 5 },
         color: "white",
         position: "relative",
       }}
@@ -29,18 +29,18 @@ export default async function ClinicOverview({ locale }: any) {
                 position: "absolute",
                 bottom: 0,
                 "&:dir(ltr)": {
-                  left: { xs: "50%", md: 0 },
+                  left: { xs: "50%", md: "8%" },
                   transform: { xs: "translatex(-50%)", md: "none" },
                 },
                 "&:dir(rtl)": {
-                  right: { xs: "50%", md: 0 },
+                  right: { xs: "50%", md: "8%" },
                   transform: { xs: "translatex(50%) scaleX(-1)", md: "scaleX(-1)" },
                 },
-                maxWidth: { xs: "320px", sm: "700px", md: "800px", lg: "1000px" },
+                width: { xs: "320px", sm: "450px", md: "370px", lg: "480px" },
               }}
             />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={6} sx={{ textAlign: { xs: "center", md: "start" } }}>
             <Typography
               variant="h4"
               component="h2"
@@ -61,7 +61,7 @@ export default async function ClinicOverview({ locale }: any) {
                   fontWeight: 500,
                   lineHeight: "32px",
                 },
-                mb: { xs: 25, sm: 55, md: 0 },
+                mb: { xs: 55, sm: 75, md: 0 },
               }}
             >
               <Typography variant="body1" paragraph>

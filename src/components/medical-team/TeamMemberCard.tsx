@@ -1,7 +1,7 @@
 "use client";
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
-import SpecialButton from "../common/SpecialButton";
+import { SpecialLink } from "..";
 import { TeamMember } from "@/src/types";
 import { useTranslation } from "react-i18next";
 
@@ -89,7 +89,14 @@ export default function TeamMemberCard(teamMemberData: TeamMember) {
         </Typography>
 
         <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <SpecialButton size="lg" label={t("viewProfile")} locale={locale} />
+          <SpecialLink
+            href="/doctor-information/doctor-name"
+            size="lg"
+            width="100%"
+            label={t("viewProfile")}
+            background="#fff"
+            locale={locale}
+          />
         </Box>
       </Box>
     </Box>

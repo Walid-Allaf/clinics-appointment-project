@@ -9,7 +9,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { Links } from "./Links";
-import SpecialButton from "../common/SpecialButton";
+import { Logo, SpecialLink } from "..";
 import { useTranslation } from "react-i18next";
 
 interface Props {
@@ -20,7 +20,7 @@ interface Props {
   window?: () => Window;
 }
 
-const drawerWidth = 240;
+const drawerWidth = 315;
 
 export default function DrawerAppBar({ window, locale }: any) {
   // const { window, locale } = props;
@@ -33,9 +33,7 @@ export default function DrawerAppBar({ window, locale }: any) {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        Logo
-      </Typography>
+      <Logo locale={locale} />
       <Divider />
       <Links position="drawer" />
     </Box>
@@ -54,17 +52,15 @@ export default function DrawerAppBar({ window, locale }: any) {
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
-              sx={{ display: { md: "none" } }}
+              sx={{ display: { lg: "none" } }}
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" component="div">
-              Logo
-            </Typography>
+            <Logo locale={locale} />
           </Box>
           <Links position="header" />
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            <SpecialButton label={t("bookNow")} size="sm" locale={locale} />
+            <SpecialLink label={t("bookNow")} size="sm" color="#fff" locale={locale} />
           </Box>
         </Toolbar>
       </AppBar>
@@ -80,7 +76,7 @@ export default function DrawerAppBar({ window, locale }: any) {
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: "block", md: "none" },
+            display: { xs: "block", lg: "none" },
             "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
           }}
         >

@@ -17,7 +17,9 @@ export { default as MedicalTeam } from "./medical-team/MedicalTeam";
 export { default as TeamMemberCard } from "./medical-team/TeamMemberCard";
 export { default as MedicalTeamSlider } from "./medical-team/MedicalTeamSlider";
 
-export { default as SpecialButton } from "./common/SpecialButton";
+export { default as SpecialLink } from "./common/SpecialLink";
 export { default as LanguageChanger } from "./common/LanguageChanger";
+export { default as Title } from "./common//Title";
+export { default as Logo } from "./common//Logo";
 
 export { default as Footer } from "./footer/Footer";

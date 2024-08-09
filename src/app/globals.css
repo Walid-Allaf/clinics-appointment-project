@@ -28,6 +28,11 @@ body {
   color: rgb(var(--foreground-rgb));
 }
 
+a {
+  text-decoration: none;
+  color: initial;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

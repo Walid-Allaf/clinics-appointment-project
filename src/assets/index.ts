@@ -14,7 +14,8 @@ export { default as SPECIALTYIMAGE3 } from "./icons/specialtyImage-3.svg";
 export { default as SPECIALTYIMAGE4 } from "./icons/specialtyImage-4.svg";
 
 // IMAGES
-export { default as HEROIMAGE } from "./images/hero-image.svg";
+export { default as LOGO } from "./images/logo.svg";
+export { default as HEROIMAGE } from "./images/hero-image-1.svg";
 
 export { default as BRANCH1 } from "./images/Branch-1.png";
 export { default as BRANCH2 } from "./images/Branch-2.png";

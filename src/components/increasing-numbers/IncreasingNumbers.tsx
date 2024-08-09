@@ -40,7 +40,25 @@ export default function IncreasingNumbers() {
           flexWrap: "wrap",
           justifyContent: "center",
           alignItems: "center",
-          "& .divider:not(:last-of-type)": { background: { xs: "transparent", lg: "#fff" } },
+          // Complex css code for numbers borders 😅
+          "& .divider:not(:last-of-type)": { background: { xs: "transparent", md: "#fff" } },
+          "[dir=ltr] & .boxx:nth-child(1)": {
+            borderBottom: { xs: "1px solid #fff", md: "none" },
+            borderRight: { sm: "1px solid #fff", md: "none" },
+          },
+          "[dir='rtl'] & .boxx:nth-child(1)": {
+            borderBottom: { xs: "1px solid #fff", md: "none" },
+            borderLeft: { sm: "1px solid #fff", md: "none" },
+          },
+          "& .boxx:nth-child(3)": { borderBottom: { xs: "1px solid #fff", md: "none" } },
+          "[dir=ltr] & .boxx:nth-child(5)": {
+            borderBottom: { xs: "1px solid #fff", md: "none" },
+            borderRight: { sm: "1px solid #fff", md: "none" },
+          },
+          "[dir='rtl'] & .boxx:nth-child(5)": {
+            borderBottom: { xs: "1px solid #fff", md: "none" },
+            borderLeft: { sm: "1px solid #fff", md: "none" },
+          },
         }}
       >
         {isVisible &&
@@ -53,7 +71,4 @@ export default function IncreasingNumbers() {
       </Box>
     </Box>
   );
-}
-{
-  /* <CounterUp image={COUNTRIES} title="Countries" start={0} end={6} timer={100} /> */
 }

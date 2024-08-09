@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import i18nConfig from "@/i18nConfig";
 import { Select, MenuItem } from "@mui/material";
+import Cookies from "js-cookie";
 
 export default function LanguageChanger() {
   const { i18n } = useTranslation();
@@ -21,20 +22,27 @@ export default function LanguageChanger() {
     const date = new Date();
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
     const expires = date.toUTCString();
-    document.cookie = `NEXT_LOCALE=${newLocale};expires=${expires};path=/`;
+    Cookies.set("NEXT_LOCALE", newLocale);
 
     // redirect to the new locale path
-    if (currentLocale === i18nConfig.defaultLocale && !i18nConfig.prefixDefault) {
-      router.push("/" + newLocale + currentPathname);
-    } else {
-      router.push(currentPathname.replace(`/${currentLocale}`, `/${newLocale}`));
-    }
+    router.push(currentPathname.replace(`/${currentLocale}`, `/${newLocale}`));
+    // if (currentLocale === i18nConfig.defaultLocale) {
+    // router.push("/" + newLocale + currentPathname);
+    // } else {
+    // router.push(currentPathname.replace(`/${currentLocale}`, `/${newLocale}`));
+    // }
 
     router.refresh();
   };
 
   return (
-    <Select size="small" onChange={handleChange} value={currentLocale}>
+    <Select
+      size="small"
+      color="secondary"
+      sx={{ background: "#fff" }}
+      onChange={handleChange}
+      value={currentLocale}
+    >
       <MenuItem value="en">English</MenuItem>
       <MenuItem value="ar">Arabic</MenuItem>
     </Select>

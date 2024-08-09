@@ -5,7 +5,7 @@ import { createTheme } from "@mui/material/styles";
 const almarai = Almarai({
   subsets: ["arabic"],
   display: "swap",
-  weight: "300",
+  weight: ["300", "400", "700"],
 });
 const rtl_theme = createTheme({
   direction: "ltr",

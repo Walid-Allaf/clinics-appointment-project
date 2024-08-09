@@ -26,10 +26,10 @@ export default function BranchesSlider(props: { slides: Array<Branches>; locale:
         <Swiper
           loop
           centeredSlides={true}
-          autoplay={{
-            delay: 2500,
-            disableOnInteraction: false,
-          }}
+          // autoplay={{
+          //   delay: 2500,
+          //   disableOnInteraction: false,
+          // }}
           pagination={{
             el: ".swiper-custom-pagination",
             clickable: true,

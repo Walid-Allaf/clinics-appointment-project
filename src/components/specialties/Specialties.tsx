@@ -6,7 +6,7 @@ import initTranslations from "@/src/app/i18n";
 export default async function Specialties({ locale }: any) {
   const { t } = await initTranslations(locale, ["specialties"]);
   return (
-    <Box component={"section"} sx={{ px: 8, py: 8 }}>
+    <Box component={"section"} sx={{ px: { xs: 1, sm: 4, md: 8 }, py: 8 }}>
       <Typography
         color={"primary"}
         sx={{ fontSize: "32px", fontWeight: "600", lineHeight: "40px", textAlign: "center", mb: 5 }}

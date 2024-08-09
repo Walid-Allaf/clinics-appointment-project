@@ -17,8 +17,8 @@ export default async function SpecialtyCard(props: { item: SpecialtiesItem; loca
       href={path}
       key={text}
       sx={{
-        width: "253px",
-        height: "239px",
+        width: { xs: "169px", md: "253px" },
+        height: { xs: "169px", md: "239px" },
         display: "flex",
         position: "relative",
         background: "#004B71",
@@ -55,9 +55,18 @@ export default async function SpecialtyCard(props: { item: SpecialtiesItem; loca
             gap: "16px",
           }}
         >
-          <Image src={icon} alt={text} width={width} height={height} />
+          <Box
+            sx={{ width: { xs: width - 18, md: width }, height: { xs: height - 18, md: height } }}
+          >
+            <Image src={icon} alt={text} objectFit="cover" />
+          </Box>
           <Typography
-            sx={{ fontSize: "24px", fontWeight: 500, lineHeight: "29.26px", color: "#fff" }}
+            sx={{
+              fontSize: { xs: "20px", md: "24px" },
+              fontWeight: 500,
+              lineHeight: "29.26px",
+              color: "#fff",
+            }}
           >
             {t(text)}
           </Typography>
