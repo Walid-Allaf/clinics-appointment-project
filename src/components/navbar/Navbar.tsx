@@ -46,7 +46,12 @@ export default function DrawerAppBar({ window, locale }: any) {
       {/* *** NAV IN COMPUTER *** */}
       <AppBar component="nav">
         <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Logo locale={locale} />
+          <Links position="header" />
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <Box sx={{ display: { xs: "none", sm: "block" } }}>
+              <SpecialLink label={t("bookNow")} size="sm" color="#fff" locale={locale} />
+            </Box>
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -56,11 +61,6 @@ export default function DrawerAppBar({ window, locale }: any) {
             >
               <MenuIcon />
             </IconButton>
-            <Logo locale={locale} />
-          </Box>
-          <Links position="header" />
-          <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            <SpecialLink label={t("bookNow")} size="sm" color="#fff" locale={locale} />
           </Box>
         </Toolbar>
       </AppBar>

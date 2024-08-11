@@ -5,5 +5,16 @@
   "Pediatric": "Pediatric",
   "Neurology": "Neurology",
   "Teeth": "Teeth",
-  "Dermatology": "Dermatology"
+  "Dermatology": "Dermatology",
+
+  "pageTitle": "Select the desired specialty",
+  "mapTitle": "View Our Location on Google Maps",
+  "workDays": "Work days",
+  "contactDetails": "CONTACT DETAILS",
+  "bookAppointment": "Book Appointment Now",
+  "Monday": "Monday",
+  "Tuesday": "Tuesday",
+  "Wednesday": "Wednesday",
+  "Thursday": "Thursday",
+  "Sunday": "Sunday"
 }

@@ -5,5 +5,16 @@
   "Pediatric": "طب الأطفال",
   "Neurology": "طب الأعصاب",
   "Teeth": "طب الأسنان",
-  "Dermatology": "طب الجلدية"
+  "Dermatology": "طب الجلدية",
+
+  "pageTitle": "اختر التخصص المطلوب",
+  "mapTitle": "شاهد موقعنا على خرائط جوجل",
+  "workDays": "أيام وأوقات الدوام",
+  "contactDetails": "تفاصيل الاتصال",
+  "bookAppointment": "احجز موعد الآن",
+  "Monday": "الاثنين",
+  "Tuesday": "الثلاثاء",
+  "Wednesday": "الأربعاء",
+  "Thursday": "الخميس",
+  "Sunday": "الأحد"
 }

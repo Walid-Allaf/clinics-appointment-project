@@ -10,7 +10,7 @@ export default function Logo(props: { locale: lang }) {
     <Box
       component={Link}
       href={"/"}
-      sx={{ display: "flex", alignItems: "center", gap: 1, my: 1.5 }}
+      sx={{ display: "flex", alignItems: "center", gap: 1 /* my: 1.5 */ }}
     >
       <Box component={Image} src={LOGO} alt="logo" width={60} height={60} />
       <Typography

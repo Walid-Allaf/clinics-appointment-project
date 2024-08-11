@@ -16,7 +16,7 @@ function getLocale(request) {
   }
 
   // COOKIE
-  const cookieLocale = request.cookies.get("NEXT_LOCALE").value;
+  const cookieLocale = request.cookies.get("NEXT_LOCALE")?.value;
   console.log(cookieLocale);
   if (cookieLocale && locales.includes(cookieLocale)) {
     return cookieLocale;

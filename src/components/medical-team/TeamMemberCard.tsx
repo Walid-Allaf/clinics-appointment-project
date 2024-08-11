@@ -12,7 +12,7 @@ export default function TeamMemberCard(teamMemberData: TeamMember) {
   return (
     <Box
       sx={{
-        maxWidth: 345,
+        maxWidth: 390,
         mx: "auto",
         my: 3,
         position: "relative",
@@ -22,6 +22,7 @@ export default function TeamMemberCard(teamMemberData: TeamMember) {
       <Box
         sx={{
           px: 3,
+          overflow: "hidden",
           "&:before": {
             content: '""',
             position: "absolute",
@@ -42,7 +43,9 @@ export default function TeamMemberCard(teamMemberData: TeamMember) {
             width: "100%",
             height: "100%",
             position: "relative",
+            bottom: "-5px",
             zIndex: 2,
+            aspectRatio: "1 / 1.5",
           }}
         />
       </Box>
@@ -77,8 +80,26 @@ export default function TeamMemberCard(teamMemberData: TeamMember) {
             fontWeight: 500,
             lineHeight: "20px",
             width: "max-content",
+            color: "#00C0FF",
+            position: "relative",
           }}
         >
+          <Box
+            component={"span"}
+            sx={{
+              position: "absolute",
+              bottom: "-10px",
+              "[dir=ltr]": {
+                right: "0px",
+              },
+              "[dir=rtl]": {
+                left: "0px",
+              },
+              background: "#00C0FF",
+              width: "150%",
+              height: "2px",
+            }}
+          ></Box>
           {specialty}
         </Typography>
         <Typography gutterBottom sx={{ fontSize: "20px", fontWeight: 500, lineHeight: "25px" }}>

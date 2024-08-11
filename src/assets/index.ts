@@ -24,3 +24,4 @@ export { default as BRANCH4 } from "./images/Branch-4.png";
 
 export { default as portraitSmilingMaleDoctor } from "./images/portrait-smiling-male-doctor.svg";
 export { default as TEAMMEMBER1 } from "./images/team-member-1.png";
+export { default as RANDOMDOCTOR } from "./images/random-doctor.svg";

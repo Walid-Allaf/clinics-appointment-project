@@ -19,7 +19,9 @@ export { default as MedicalTeamSlider } from "./medical-team/MedicalTeamSlider";
 
 export { default as SpecialLink } from "./common/SpecialLink";
 export { default as LanguageChanger } from "./common/LanguageChanger";
-export { default as Title } from "./common//Title";
-export { default as Logo } from "./common//Logo";
+export { default as Title } from "./common/Title";
+export { default as Logo } from "./common/Logo";
+export { default as MapProvider } from "./common/MapProvider";
+export { default as MapComponent } from "./common/Map";
 
 export { default as Footer } from "./footer/Footer";

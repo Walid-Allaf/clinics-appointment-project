@@ -1,0 +1,8 @@
+{
+  "title": "Select a doctor",
+  "doctorName": "The doctor's full name",
+  "description": "With over 15 years of experience, [Doctor's Name] is based at [Clinic Name] in [City]. Specializing in advanced cardiac care and diagnostics, [he/she] is fluent in both English and Arabic.",
+  "specialty": "Medical specialty",
+  "randomDoctorName": "Random Doctor Name",
+  "randomDescription": "With over 15 years of experience, [Doctor's Name] is based at [Clinic Name] in [City]. Specializing in advanced cardiac care and diagnostics, [he/she] is fluent in both English and Arabic."
+}
