@@ -45,7 +45,13 @@ export default async function SpecialtiesPage({ params: { locale } }: any) {
         {t("mapTitle")}
       </Typography>
 
-      <Grid container maxWidth="100%" mb={4} direction={{ xs: "column-reverse", sm: "row" }}>
+      <Grid
+        container
+        maxWidth="100%"
+        mb={4}
+        direction={{ xs: "column-reverse", sm: "row" }}
+        flexWrap={"nowrap"}
+      >
         <Grid item xs={12} sm={5} md={4} lg={3}>
           <Box
             sx={{
@@ -110,7 +116,14 @@ export default async function SpecialtiesPage({ params: { locale } }: any) {
             <SpecialLink label={t("bookAppointment")} locale={locale} size="lg" color="#fff" />
           </Box>
         </Grid>
-        <Grid item xs={12} sm={7} md={8} lg={9} sx={{ minHeight: "500px" }}>
+        <Grid
+          item
+          xs={12}
+          sm={7}
+          md={8}
+          lg={9}
+          sx={{ "& iframe": { minHeight: { xs: "500px", sm: "100%" } }, minHeight: "500px" }}
+        >
           {/* <MapProvider>
             <MapComponent />
           </MapProvider> */}
