@@ -52,5 +52,36 @@
     "step4.info": "CONTACT DETAILS",
     "step4.addToCalendar": "Add To Calendar",
     "step4.agree": "OK"
+  },
+  "clinicsPage": {
+    "title": "Choose Your Location"
+  },
+  "specialityPage": {
+    "title": "Specialties",
+    "Cardiology": "Cardiology",
+    "Ophthalmology": "Ophthalmology",
+    "Pediatric": "Pediatric",
+    "Neurology": "Neurology",
+    "Teeth": "Teeth",
+    "Dermatology": "Dermatology",
+
+    "pageTitle": "Select the desired specialty",
+    "mapTitle": "View Our Location on Google Maps",
+    "workDays": "Work days",
+    "contactDetails": "CONTACT DETAILS",
+    "bookAppointment": "Book Appointment Now",
+    "Monday": "Monday",
+    "Tuesday": "Tuesday",
+    "Wednesday": "Wednesday",
+    "Thursday": "Thursday",
+    "Sunday": "Sunday"
+  },
+  "doctorsPage": {
+    "title": "Select a doctor",
+    "doctorName": "The doctor's full name",
+    "description": "With over 15 years of experience, [Doctor's Name] is based at [Clinic Name] in [City]. Specializing in advanced cardiac care and diagnostics, [he/she] is fluent in both English and Arabic.",
+    "specialty": "Medical specialty",
+    "randomDoctorName": "Random Doctor Name",
+    "randomDescription": "With over 15 years of experience, [Doctor's Name] is based at [Clinic Name] in [City]. Specializing in advanced cardiac care and diagnostics, [he/she] is fluent in both English and Arabic."
   }
 }

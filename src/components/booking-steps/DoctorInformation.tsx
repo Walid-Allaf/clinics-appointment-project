@@ -5,8 +5,7 @@ import { Container, Grid, Box, Typography, Card, CardContent, Button } from "@mu
 import Image from "next/image";
 import { useState } from "react";
 
-const DoctorInformation = ({ params, searchParams }: any) => {
-  console.log(params);
+const DoctorInformation = ({ locale }: any) => {
   const [open, setOpen] = useState(false);
   return (
     <Box>
@@ -38,11 +37,9 @@ const DoctorInformation = ({ params, searchParams }: any) => {
 
       <Container sx={{ display: { xs: "grid", md: "block" }, placeItems: "center" }}>
         <Box
-          // container
           display={"flex"}
           gap={6}
           flexDirection={{ xs: "column-reverse", md: "row" }}
-          // spacing={6}
           sx={{ marginTop: 2 }}
           maxWidth="100%"
         >
@@ -177,7 +174,7 @@ const DoctorInformation = ({ params, searchParams }: any) => {
           </Box>
         </Box>
       </Container>
-      <BookingDialog open={open} onClose={() => setOpen(false)} locale={params.locale} />
+      <BookingDialog open={open} onClose={() => setOpen(false)} locale={locale} />
     </Box>
   );
 };

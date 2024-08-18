@@ -1,16 +1,17 @@
+"use client";
 import Link from "next/link";
 import Image from "next/image";
 import { SPECIALTYCARDVECTOR } from "@/src/assets";
 import { Box, Typography } from "@mui/material";
 import { SpecialtiesItem } from "@/src/types";
-import initTranslations from "@/src/app/i18n";
+import { useTranslation } from "react-i18next";
 
-export default async function SpecialtyCard(props: { item: SpecialtiesItem; locale: any }) {
+export default function SpecialtyCard(props: { item: SpecialtiesItem; locale: any }) {
   const {
     item: { text, icon, path, width, height },
     locale,
   } = props;
-  const { t } = await initTranslations(locale, ["specialties"]);
+  const { t } = useTranslation();
   return (
     <Box
       component={Link}
@@ -68,7 +69,7 @@ export default async function SpecialtyCard(props: { item: SpecialtiesItem; loca
               color: "#fff",
             }}
           >
-            {t(text)}
+            {t("specialityPage." + text)}
           </Typography>
         </Box>
       </Box>

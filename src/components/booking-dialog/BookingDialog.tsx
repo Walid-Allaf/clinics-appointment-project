@@ -310,8 +310,10 @@ export default function BookingDialog({ open, onClose, locale }: any) {
                   />
                 </FormControl>
                 <Box sx={{ p: 2 }}>
-                  <Typography>{t("bookingDialog.step1.morning")}</Typography>
-                  <RadioGroup sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
+                  <Typography sx={{ py: 1 }}>{t("bookingDialog.step1.morning")}</Typography>
+                  <RadioGroup
+                    sx={{ display: "flex", flexDirection: "row", gap: 1, "[dir=ltr] &": { px: 1 } }}
+                  >
                     {dates1.map((el, index) => (
                       <FormControlLabel
                         key={index}
@@ -336,8 +338,10 @@ export default function BookingDialog({ open, onClose, locale }: any) {
                       />
                     ))}
                   </RadioGroup>
-                  <Typography>{t("bookingDialog.step1.afternon")}</Typography>
-                  <RadioGroup sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
+                  <Typography sx={{ py: 1 }}>{t("bookingDialog.step1.afternon")}</Typography>
+                  <RadioGroup
+                    sx={{ display: "flex", flexDirection: "row", gap: 1, "[dir=ltr] &": { px: 1 } }}
+                  >
                     {dates2.map((el, index) => (
                       <FormControlLabel
                         key={index}
@@ -362,8 +366,10 @@ export default function BookingDialog({ open, onClose, locale }: any) {
                       />
                     ))}
                   </RadioGroup>
-                  <Typography>{t("bookingDialog.step1.night")}</Typography>
-                  <RadioGroup sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
+                  <Typography sx={{ py: 1 }}>{t("bookingDialog.step1.night")}</Typography>
+                  <RadioGroup
+                    sx={{ display: "flex", flexDirection: "row", gap: 1, "[dir=ltr] &": { px: 1 } }}
+                  >
                     {dates3.map((el, index) => (
                       <FormControlLabel
                         key={index}
@@ -393,7 +399,7 @@ export default function BookingDialog({ open, onClose, locale }: any) {
                     fullWidth={mobile < 600 ? true : false}
                     variant="contained"
                     color="primary"
-                    sx={{ mt: 2 }}
+                    sx={{ mt: 2, p: { xs: "8px 64px 8px 64px", md: "15px 160px 15px 160px" } }}
                     onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)}
                   >
                     {mobile < 600
@@ -486,7 +492,7 @@ export default function BookingDialog({ open, onClose, locale }: any) {
                         variant="contained"
                         color="primary"
                         sx={{
-                          p: "15px 160px 15px 160px",
+                          p: { xs: "8px 64px 8px 64px", md: "15px 160px 15px 160px" },
                           display: "flex",
                           alignItems: "center",
                           gap: 1,
@@ -534,14 +540,14 @@ export default function BookingDialog({ open, onClose, locale }: any) {
                       placeholder={t("bookingDialog.step3.placeholder")}
                       // value={options.impluse}
                       // onChange={(e) => setOptions({ ...options, impluse: e.target.value })}
-                      sx={{ width: "70%" }}
+                      sx={{ width: { xs: "100%", md: "70%" } }}
                     />
                     <Button
                       fullWidth={mobile < 600 ? true : false}
                       variant="contained"
                       color="primary"
                       sx={{
-                        p: "15px 160px 15px 160px",
+                        p: { xs: "8px 64px 8px 64px", md: "15px 160px 15px 160px" },
                         display: "flex",
                         alignItems: "center",
                         gap: 1,

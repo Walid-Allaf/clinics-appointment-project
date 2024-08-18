@@ -16,7 +16,7 @@ export default function Logo(props: { locale: lang }) {
       <Typography
         color={"secondary"}
         sx={{
-          fontSize: "20px",
+          fontSize: { xs: "16px", md: "20px" },
           fontWeight: 700,
           lineHeight: "30px",
           textWrap: "nowrap",

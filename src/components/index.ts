@@ -28,3 +28,9 @@ export { default as MapComponent } from "./common/Map";
 export { default as BookingDialog } from "./booking-dialog/BookingDialog";
 
 export { default as Footer } from "./footer/Footer";
+
+// pages
+export { default as Clinics } from "./booking-steps/Clinics";
+export { default as Specialty } from "./booking-steps/Specialties";
+export { default as Doctors } from "./booking-steps/Doctors";
+export { default as DoctorInformation } from "./booking-steps/DoctorInformation";

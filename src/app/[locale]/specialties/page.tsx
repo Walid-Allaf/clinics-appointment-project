@@ -44,95 +44,97 @@ export default async function SpecialtiesPage({ params: { locale } }: any) {
         {t("mapTitle")}
       </Typography>
 
-      <Grid
-        container
-        maxWidth="100%"
-        mb={4}
-        direction={{ xs: "column-reverse", sm: "row" }}
-        flexWrap={"nowrap"}
-      >
-        <Grid item xs={12} sm={5} md={4} lg={3}>
-          <Box
-            sx={{
-              background: "#004B71",
-              width: "100%",
-              height: "100%",
-              color: "#fff",
-              py: 4,
-              px: 2,
-              display: "flex",
-              flexDirection: "column",
-              gap: 3,
-            }}
-          >
-            <Typography
-              sx={{ fontSize: "24px", fontWeight: 500, lineHeight: "28px", color: "#00D4FF" }}
+      <Box sx={{ display: "grid", placeItems: "center" }}>
+        <Grid
+          container
+          maxWidth="100%"
+          mb={4}
+          direction={{ xs: "column-reverse", sm: "row" }}
+          flexWrap={"nowrap"}
+        >
+          <Grid item xs={12} sm={5} md={4} lg={3}>
+            <Box
+              sx={{
+                background: "#004B71",
+                width: "100%",
+                height: "100%",
+                color: "#fff",
+                py: 4,
+                px: 2,
+                display: "flex",
+                flexDirection: "column",
+                gap: 3,
+              }}
             >
-              {t("workDays")}
-            </Typography>
-            <Box>
-              {WorkDays.map((workDay, index) => (
-                <Box
-                  key={index}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    mb: 1,
-                    "& p": {
-                      fontSize: "12px",
-                      fontWeight: 500,
-                      lineHeight: "28px",
-                    },
-                  }}
-                >
-                  <Typography>{t(workDay.day)}</Typography>
-                  <Typography>{workDay.time}</Typography>
-                </Box>
-              ))}
-            </Box>
-            <Typography
-              sx={{ fontSize: "24px", fontWeight: 500, lineHeight: "28px", color: "#00D4FF" }}
-            >
-              {t("contactDetails")}
-            </Typography>
-            <Box>
-              {Contact.map((contact, index) => (
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }} key={index}>
-                  <ImageIcon />
-                  <Typography
+              <Typography
+                sx={{ fontSize: "24px", fontWeight: 500, lineHeight: "28px", color: "#00D4FF" }}
+              >
+                {t("workDays")}
+              </Typography>
+              <Box>
+                {WorkDays.map((workDay, index) => (
+                  <Box
+                    key={index}
                     sx={{
-                      fontSize: "12px",
-                      fontWeight: 500,
-                      lineHeight: "28px",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      mb: 1,
+                      "& p": {
+                        fontSize: "12px",
+                        fontWeight: 500,
+                        lineHeight: "28px",
+                      },
                     }}
                   >
-                    {contact}
-                  </Typography>
-                </Box>
-              ))}
+                    <Typography>{t(workDay.day)}</Typography>
+                    <Typography>{workDay.time}</Typography>
+                  </Box>
+                ))}
+              </Box>
+              <Typography
+                sx={{ fontSize: "24px", fontWeight: 500, lineHeight: "28px", color: "#00D4FF" }}
+              >
+                {t("contactDetails")}
+              </Typography>
+              <Box>
+                {Contact.map((contact, index) => (
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }} key={index}>
+                    <ImageIcon />
+                    <Typography
+                      sx={{
+                        fontSize: "12px",
+                        fontWeight: 500,
+                        lineHeight: "28px",
+                      }}
+                    >
+                      {contact}
+                    </Typography>
+                  </Box>
+                ))}
+              </Box>
+              <SpecialLink label={t("bookAppointment")} locale={locale} size="lg" color="#fff" />
             </Box>
-            <SpecialLink label={t("bookAppointment")} locale={locale} size="lg" color="#fff" />
-          </Box>
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={7}
-          md={8}
-          lg={9}
-          sx={{ "& iframe": { minHeight: { xs: "500px", sm: "100%" } }, minHeight: "500px" }}
-        >
-          {/* <MapProvider>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm={7}
+            md={8}
+            lg={9}
+            sx={{ "& iframe": { minHeight: { xs: "500px", sm: "100%" } }, minHeight: "500px" }}
+          >
+            {/* <MapProvider>
             <MapComponent />
           </MapProvider> */}
-          <iframe
-            src="https://maps.google.com/maps?q=36.19980587168142,37.16299669311489&z=16&output=embed"
-            height="100%"
-            width="100%"
-          ></iframe>
+            <iframe
+              src="https://maps.google.com/maps?q=36.19980587168142,37.16299669311489&z=16&output=embed"
+              height="100%"
+              width="100%"
+            ></iframe>
+          </Grid>
         </Grid>
-      </Grid>
+      </Box>
     </Container>
   );
 }
