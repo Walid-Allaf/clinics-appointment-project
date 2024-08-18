@@ -102,7 +102,7 @@ const DoctorInformation = ({ locale }: any) => {
                     "&:before": {
                       content: "''",
                       position: "absolute",
-                      bottom: "7px",
+                      bottom: 0,
                       left: 0,
                       width: "100%",
                       height: "94%",
@@ -127,7 +127,7 @@ const DoctorInformation = ({ locale }: any) => {
               </Box>
               <CardContent
                 sx={{
-                  "& p:not(:last-of-type)": {
+                  "& p": {
                     display: "flex",
                     justifyContent: "space-between",
                     fontWeight: 500,

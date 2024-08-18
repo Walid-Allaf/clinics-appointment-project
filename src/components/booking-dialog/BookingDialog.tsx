@@ -511,7 +511,7 @@ export default function BookingDialog({ open, onClose, locale }: any) {
               </Box>
             )}
             {activeStep === 2 && (
-              <Box maxWidth="100%" p={{ xs: 2, sm: 4 }}>
+              <Box maxWidth="100%">
                 <Typography
                   sx={{
                     fontSize: { xs: "18px", sm: "26px" },
@@ -526,7 +526,7 @@ export default function BookingDialog({ open, onClose, locale }: any) {
                 >
                   {t("bookingDialog.step3")}
                 </Typography>
-                <Box>
+                <Box p={{ xs: 2, sm: 4 }}>
                   <Box sx={{ width: "100%", textAlign: "center", mb: 4, mt: 6 }}>
                     <Typography sx={{ fontSize: "20px", fontWeight: 400, lineHeight: "22.32px" }}>
                       {t("bookingDialog.step3.title")}
