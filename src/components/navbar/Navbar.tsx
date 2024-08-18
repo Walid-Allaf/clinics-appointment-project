@@ -9,7 +9,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { Links } from "./Links";
-import { Logo, SpecialLink } from "..";
+import { LanguageChanger, Logo, SpecialLink } from "..";
 import { useTranslation } from "react-i18next";
 
 interface Props {
@@ -20,7 +20,7 @@ interface Props {
   window?: () => Window;
 }
 
-const drawerWidth = 315;
+const drawerWidth = 325;
 
 export default function DrawerAppBar({ window, locale }: any) {
   // const { window, locale } = props;
@@ -45,12 +45,21 @@ export default function DrawerAppBar({ window, locale }: any) {
     <Box sx={{ display: "flex" }}>
       {/* *** NAV IN COMPUTER *** */}
       <AppBar component="nav">
-        <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            position: "relative",
+          }}
+        >
           <Logo locale={locale} />
-          <Links position="header" />
+          <Box sx={{ position: "absolute", left: "50%", transform: "translatex(-50%)", top: 0 }}>
+            <Links position="header" />
+          </Box>
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             <Box sx={{ display: { xs: "none", sm: "block" } }}>
-              <SpecialLink label={t("bookNow")} size="sm" color="#fff" locale={locale} />
+              <LanguageChanger />
             </Box>
             <IconButton
               color="inherit"

@@ -10,7 +10,7 @@ export default async function Footer({ locale }: any) {
 
   return (
     <Box sx={{ backgroundColor: "#004B71", color: "#fff", py: 4 }}>
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" sx={{ display: "grid", justifyItems: "center" }}>
         <Grid
           container
           spacing={4}
@@ -65,7 +65,8 @@ export default async function Footer({ locale }: any) {
                   // maxWidth: "max-content",
                   transition: ".3s ease-in-out",
                   "&:hover": {
-                    paddingLeft: 2,
+                    "[dir=rtl] &": { paddingRight: 2 },
+                    "[dir=ltr] &": { paddingLeft: 2 },
                   },
                 }}
               >
@@ -104,11 +105,13 @@ export default async function Footer({ locale }: any) {
               ))}
             </List>
           </Grid>
+          <Grid item xs={12}>
+            <Divider sx={{ my: 2, borderColor: "#fff" }} />
+            <Typography variant="body2" align="center">
+              &copy; 2024 | {t("allRightsReserved")}
+            </Typography>
+          </Grid>
         </Grid>
-        <Divider sx={{ my: 2, borderColor: "#fff" }} />
-        <Typography variant="body2" align="center">
-          &copy; 2024 | {t("allRightsReserved")}
-        </Typography>
       </Container>
     </Box>
   );

@@ -16,5 +16,41 @@
     "feature1": "شبكة واسعة من الأطباء والعيادات",
     "feature2": "تجارب مرضى موثوقة",
     "feature3": " بحث وحجز سهل"
+  },
+  "quickSearch": {
+    "title": "ابحث بسرعة هنا",
+    "chooseSpeciality": "اختر التخصص",
+    "chooseClinic": "اختر فرع العيادة",
+    "chooseDoctor": "اختر الطبيب",
+    "search": "بحث"
+  },
+  "bookingDialog": {
+    "step1": "التاريخ و الوقت",
+    "step1.title": "حدد التاريخ و الوقت",
+    "step1.morning": "الصباح",
+    "step1.afternon": "الظهيرة",
+    "step1.night": "المساء",
+    "step1.book": "حجز الموعد في",
+    "confirm": "تأكيد",
+    "step2": "معلومات المريض",
+    "step2.title": "معلوماتك الشخصية هي :",
+    "step2.mobile": "رقم الموبايل",
+    "step2.firstname": "الاسم الاول",
+    "step2.lastname": "الاسم العائلة",
+    "step2.gender": "الجنس",
+    "step2.birthdate": "تاريخ الميلاد",
+    "step2.howYouKnowUs": "كيف تعرفت على عيادتنا ؟",
+    "step3": "رمز التحقق",
+    "step3.title": "الرجاء إدخال الكود الذي تم إرساله إليك عبر الواتساب",
+    "step3.placeholder": "ادخل الكود الذي تم ارساله عبر الواتس اب هنا",
+    "step3.confirm": "تأكيد الكود",
+    "step4.title": "شكرًا لك على تحديد موعدك، نحن سعداء لتأكيده.",
+    "step4.book": "معلومات الحجز",
+    "step4.bookDate": "تاريخ الحجز",
+    "step4.day": "اليوم",
+    "step4.time": "الوقت",
+    "step4.info": "تفاصيل الاتصال",
+    "step4.addToCalendar": "اضافة الى التقويم",
+    "step4.agree": "موافق"
   }
 }

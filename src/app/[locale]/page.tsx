@@ -1,9 +1,10 @@
-import { Box } from "@mui/material";
+import { Box, Grid, Container } from "@mui/material";
 import {
   ClinicOverview,
   IncreasingNumbers,
   MedicalTeam,
   OurBranches,
+  SearchComponent,
   Specialties,
   Welcome,
 } from "../../components";
@@ -18,42 +19,48 @@ export default async function Home({ params: { locale } }: any) {
   return (
     <Box>
       {/* *** LANDING *** */}
-      <Box
-        sx={{
-          background: "linear-gradient(181.27deg, #007291 -37.39%, #004B71 112.37%);",
-          maxWidth: "100%",
-          paddingX: { xs: 4, md: 8 },
-          paddingTop: { xs: 8, md: 0 },
-        }}
-      >
-        <Box
+      <Box sx={{ background: "linear-gradient(181.27deg, #007291 -37.39%, #004B71 112.37%);" }}>
+        <Container
+          maxWidth="lg"
           sx={{
+            position: "relative",
+            overflow: "hidden",
+            padding: 4,
+            paddingBottom: 0,
+            height: "100%",
             display: "flex",
-            justifyContent: "space-between",
             alignItems: "center",
-            flexDirection: { xs: "column", md: "row" },
-            minHeight: {
-              xs: "calc(100vh - 80px)",
-              md: "calc(100vh - 320px)",
-              lg: "calc(100vh - 80px)",
-            },
-            mt: { md: 2 },
+            minHeight: "calc(100vh - 70px)",
           }}
         >
-          <Welcome locale={locale} />
-          <Box
-            sx={{
-              flex: 1.5,
-              display: "flex",
-              alignItems: "center",
-              position: "relative",
-              bottom: { xs: -15, sm: 0 },
-            }}
-          >
-            <Image src={HEROIMAGE} alt="hero-image" objectFit="cover" />
-          </Box>
-        </Box>
+          <Grid container alignItems="center" justifyContent="space-between">
+            <Grid item xs={12} md={6}>
+              <Welcome locale={locale} />
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              md={6}
+              sx={{
+                position: { xs: "relative", md: "absolute" },
+                bottom: { xs: "auto", md: 0 },
+                "[dir=rtl] &": { left: { xs: "auto", md: "10px" } },
+                "[dir=ltr] &": { right: { xs: "auto", md: "10px" } },
+                mt: { xs: 2, md: 0 },
+                textAlign: { xs: "center", md: "right" },
+              }}
+            >
+              <Box
+                component={Image}
+                src={HEROIMAGE}
+                alt="Doctor"
+                sx={{ maxWidth: "100%", height: "auto" }}
+              />
+            </Grid>
+          </Grid>
+        </Container>
       </Box>
+      <SearchComponent />
 
       {/* *** Specialties *** */}
       <Specialties locale={locale} />

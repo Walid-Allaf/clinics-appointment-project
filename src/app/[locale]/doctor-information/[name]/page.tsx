@@ -1,10 +1,13 @@
+"use client";
 import { TEAMMEMBER1 } from "@/src/assets";
-import { SpecialLink } from "@/src/components";
+import { BookingDialog, SpecialLink } from "@/src/components";
 import { Container, Grid, Box, Typography, Card, CardContent, Button } from "@mui/material";
 import Image from "next/image";
+import { useState } from "react";
 
-const DoctorInformation = async ({ params, searchParams }: any) => {
+const DoctorInformation = ({ params, searchParams }: any) => {
   console.log(params);
+  const [open, setOpen] = useState(false);
   return (
     <Box>
       <Box sx={{ background: "#004B71", py: 6, width: "100%", color: "#fff" }}>
@@ -155,19 +158,23 @@ const DoctorInformation = async ({ params, searchParams }: any) => {
                   <span>Working Hours:</span> <span>9:00 AM - 03:00 PM</span>
                 </Typography>
                 <Box sx={{ mt: 4 }}>
-                  <SpecialLink
+                  {/* <SpecialLink
                     href="/"
                     label="Book an Appointment"
                     locale={params.locale}
                     size="sm"
                     width="100%"
-                  />
+                  /> */}
+                  <Button onClick={() => setOpen(true)} variant="contained" color="secondary">
+                    Book an Appointment
+                  </Button>
                 </Box>
               </CardContent>
             </Card>
           </Grid>
         </Grid>
       </Container>
+      <BookingDialog open={open} onClose={() => setOpen(false)} locale={params.locale} />
     </Box>
   );
 };

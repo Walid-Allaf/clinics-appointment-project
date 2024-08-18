@@ -5,3 +5,5 @@ export { Branches } from "./Branches";
 export { QuickLinks, Locations } from "./FooterLinks";
 export { TeamMembers } from "./TeamMembers";
 export { WorkDays } from "./WorkDays";
+export { Contact } from "./Contact";
+export { DaysOfWeek } from "./DaysOfWeek";

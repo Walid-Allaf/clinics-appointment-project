@@ -41,7 +41,7 @@ export default function TeamMemberCard(teamMemberData: TeamMember) {
           src={teamMemberImg}
           style={{
             width: "100%",
-            height: "100%",
+            height: "auto",
             position: "relative",
             bottom: "-5px",
             zIndex: 2,

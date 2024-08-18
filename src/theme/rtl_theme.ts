@@ -12,6 +12,8 @@ const rtl_theme = createTheme({
   palette: {
     primary: {
       main: "#004B71",
+      light: "#004B71bb",
+      dark: "#004B71bb",
     },
     secondary: {
       main: "#3FBDE6",
@@ -28,9 +30,63 @@ const rtl_theme = createTheme({
         root: {
           borderRadius: "100px",
           padding: "12px 40px 12px 40px",
-          background: "#0085B1",
           color: "#fff",
           textTransform: "capitalize",
+        },
+      },
+    },
+    MuiStepLabel: {
+      styleOverrides: {
+        root: {
+          gap: "10px",
+        },
+        iconContainer: {
+          color: "#fff",
+          paddingRight: 0,
+        },
+        label: {
+          color: "#fff",
+          "&.Mui-active": {
+            color: "#3FBDE6",
+          },
+          "&.Mui-completed": {
+            color: "#3FBDE6",
+          },
+        },
+      },
+    },
+    MuiStepIcon: {
+      styleOverrides: {
+        root: {
+          color: "#fff",
+          "&.Mui-active": {
+            color: "#3FBDE6",
+            "& .MuiStepIcon-text": {
+              color: "#fff",
+              fill: "#fff",
+            },
+          },
+          "&.Mui-completed": {
+            color: "#3FBDE6",
+            "& .MuiStepIcon-text": {
+              color: "#fff",
+              fill: "#fff",
+            },
+          },
+        },
+        text: {
+          color: "#717171",
+          fill: "#717171",
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#F4F4F4",
+          borderColor: "#E7E7E7",
+          color: "#004B71",
+          fontWeight: 700,
         },
       },
     },

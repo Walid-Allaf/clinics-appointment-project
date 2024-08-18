@@ -39,12 +39,12 @@ export default function LanguageChanger() {
     <Select
       size="small"
       color="secondary"
-      sx={{ background: "#fff" }}
+      sx={{ background: "#3FBDE6", borderRadius: "100px" }}
       onChange={handleChange}
       value={currentLocale}
     >
-      <MenuItem value="en">English</MenuItem>
-      <MenuItem value="ar">Arabic</MenuItem>
+      <MenuItem value="en">{currentLocale == "en" ? "English" : "الإنكليزية"}</MenuItem>
+      <MenuItem value="ar">{currentLocale == "en" ? "Arabic" : "العربية"}</MenuItem>
     </Select>
   );
 }

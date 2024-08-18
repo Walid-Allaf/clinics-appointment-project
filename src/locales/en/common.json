@@ -16,5 +16,41 @@
     "feature1": "A wide network of doctors and clinics",
     "feature2": "Easy search and booking",
     "feature3": "Trusted patient experiences"
+  },
+  "quickSearch": {
+    "title": "Search quickly here",
+    "chooseSpeciality": "Choose speciality",
+    "chooseClinic": "Choose clinic",
+    "chooseDoctor": "Choose doctor",
+    "search": "Search"
+  },
+  "bookingDialog": {
+    "step1": "Date and Time",
+    "step1.title": "Select Date and Time",
+    "step1.morning": "Morning",
+    "step1.afternon": "Afternoon",
+    "step1.night": "Evening",
+    "step1.book": "Appointment booked on",
+    "confirm": "confirm",
+    "step2": "Patient Information",
+    "step2.title": "Your personal data is",
+    "step2.mobile": "Phone Number",
+    "step2.firstname": "First Name",
+    "step2.lastname": "Last Name",
+    "step2.gender": "Gender",
+    "step2.birthdate": "Date of birth",
+    "step2.howYouKnowUs": "How did you learn about our clinic ?",
+    "step3": "Verification Code",
+    "step3.title": "Please enter the code that was sent to you via WhatsApp",
+    "step3.placeholder": "Enter the code here",
+    "step3.confirm": "Confirm Code",
+    "step4.title": "Thank you for scheduling your appointment. We are pleased to confirm it.",
+    "step4.book": "Booking Information",
+    "step4.bookDate": "Date of Appointment",
+    "step4.day": "Day",
+    "step4.time": "Time",
+    "step4.info": "CONTACT DETAILS",
+    "step4.addToCalendar": "Add To Calendar",
+    "step4.agree": "OK"
   }
 }

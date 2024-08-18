@@ -1,6 +1,6 @@
 "use client";
 import { CHECK } from "@/src/assets";
-import { Box, Typography, List, ListItem, ListItemText, Button } from "@mui/material";
+import { Box, Typography, List, ListItem, ListItemText, Grid } from "@mui/material";
 import Image from "next/image";
 import { SpecialLink } from "..";
 import { useTranslation } from "react-i18next";
@@ -17,7 +17,6 @@ export default function Welcome({ locale }: any) {
         display: "flex",
         flexDirection: "column",
         gap: 3,
-        flex: 1,
         textAlign: { xs: "center", md: "start" },
       }}
     >

@@ -1,10 +1,9 @@
 import { MapComponent, MapProvider, SpecialLink, SpecialtyCard, Title } from "@/src/components";
 import { Container, Grid, Box, Typography } from "@mui/material";
 import initTranslations from "../../i18n";
-import { SpecialtiesItems, WorkDays } from "@/src/constants";
+import { Contact, SpecialtiesItems, WorkDays } from "@/src/constants";
 import ImageIcon from "@mui/icons-material/Image";
 
-const contact = ["Damascus, Syria", "info@username.com", "+963 999 999 999"];
 export default async function SpecialtiesPage({ params: { locale } }: any) {
   const { t } = await initTranslations(locale, ["specialties"]);
   return (
@@ -98,7 +97,7 @@ export default async function SpecialtiesPage({ params: { locale } }: any) {
               {t("contactDetails")}
             </Typography>
             <Box>
-              {contact.map((contact, index) => (
+              {Contact.map((contact, index) => (
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }} key={index}>
                   <ImageIcon />
                   <Typography
@@ -128,7 +127,7 @@ export default async function SpecialtiesPage({ params: { locale } }: any) {
             <MapComponent />
           </MapProvider> */}
           <iframe
-            src="http://maps.google.com/maps?q=36.19980587168142,37.16299669311489&z=16&output=embed"
+            src="https://maps.google.com/maps?q=36.19980587168142,37.16299669311489&z=16&output=embed"
             height="100%"
             width="100%"
           ></iframe>

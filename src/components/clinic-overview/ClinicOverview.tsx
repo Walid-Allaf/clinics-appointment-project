@@ -18,7 +18,7 @@ export default async function ClinicOverview({ locale }: any) {
         position: "relative",
       }}
     >
-      <Container>
+      <Container sx={{ display: "grid", justifyItems: "center" }}>
         <Grid container spacing={4} maxWidth="100%" alignItems="center" minHeight={500}>
           <Grid item xs={12} md={6}>
             <Box
