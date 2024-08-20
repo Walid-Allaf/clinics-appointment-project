@@ -28,6 +28,7 @@
     "react-dom": "^18",
     "react-i18next": "^15.0.0",
     "react-multi-date-picker": "^4.5.2",
+    "react-timer-hook": "^3.0.7",
     "swiper": "^11.1.9"
   },
   "devDependencies": {

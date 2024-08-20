@@ -1,22 +1,33 @@
 "use client";
 import { Clinics, DoctorInformation, Doctors, Specialty } from "@/src/components";
 import { Container, Box } from "@mui/material";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
 export default function BookingAnAppointment({ params: { locale } }: any) {
   const [tabValue, setTabValue] = React.useState(0);
   const { t } = useTranslation();
+  const searchParams = useSearchParams();
+  const { replace, push } = useRouter();
+  const pathname = usePathname();
 
   const handleChange = (event: any, newValue: any) => {
     setTabValue(newValue);
   };
 
   const steps = [t("bookingDialog.step1"), t("bookingDialog.step2"), t("bookingDialog.step3")];
-
-  const [activeStep, setActiveStep] = React.useState(0);
+  const params = new URLSearchParams(searchParams);
+  const [activeStep, setActiveStep] = React.useState(Number(params.get("step")) || 0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
 
+  React.useEffect(() => {
+    if (!Number(params.get("step"))) {
+      params.set("step", "0");
+      replace(`${pathname}?${params.toString()}`);
+    }
+    setActiveStep(Number(params.get("step")));
+  }, [pathname, Number(params.get("step"))]);
   const isStepOptional = (step: number) => {
     return step === 1;
   };
@@ -31,7 +42,8 @@ export default function BookingAnAppointment({ params: { locale } }: any) {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
     }
-
+    params.set("step", (activeStep + 1).toString());
+    push(`${pathname}?${params.toString()}`);
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
   };

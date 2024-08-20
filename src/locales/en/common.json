@@ -83,5 +83,11 @@
     "specialty": "Medical specialty",
     "randomDoctorName": "Random Doctor Name",
     "randomDescription": "With over 15 years of experience, [Doctor's Name] is based at [Clinic Name] in [City]. Specializing in advanced cardiac care and diagnostics, [he/she] is fluent in both English and Arabic."
+  },
+  "validation": {
+    "numberInvalid": "Number is invalid",
+    "numberRequired": "Number is required",
+    "firstnameRequired": "First name is required",
+    "lastnameRequired": "Last name is required"
   }
 }

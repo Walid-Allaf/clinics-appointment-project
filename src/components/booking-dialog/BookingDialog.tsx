@@ -31,6 +31,8 @@ import { Contact, DaysOfWeek } from "@/src/constants";
 import ImageIcon from "@mui/icons-material/Image";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useRouter } from "next/navigation";
+import { PatientInfo } from "@/src/types";
+import CounterDown from "./CounterDown";
 
 export default function BookingDialog({ open, onClose, locale }: any) {
   const [tabValue, setTabValue] = useState(0);
@@ -67,6 +69,72 @@ export default function BookingDialog({ open, onClose, locale }: any) {
     name: dates1[0].name,
     id: dates1[0].id,
   });
+
+  const [next, setNext] = useState(false);
+  const [number, setNumber] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [birthdate, setBirthdate] = useState(dayjs());
+  const [errors, setErrors] = useState<PatientInfo>({
+    number: "",
+    firstname: "",
+    lastname: "",
+    birthdate: "",
+  });
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  const numberValidation = () => {
+    let errors: PatientInfo = {
+      number: "",
+      firstname: "",
+      lastname: "",
+      birthdate: "",
+    };
+
+    if (number === "") {
+      errors.number = t("validation.numberRequired");
+    } else if (!/^\d+$/.test(number.toString())) {
+      errors.number = t("validation.numberInvalid");
+    } else if (number.length !== 10) {
+      errors.number = t("validation.numberInvalid");
+    }
+
+    setErrors(errors);
+    return Object.values(errors).filter((err) => err !== "").length === 0;
+  };
+  const validateForm = () => {
+    console.log("validation");
+    let errors: PatientInfo = {
+      number: "",
+      firstname: "",
+      lastname: "",
+      birthdate: "",
+    };
+
+    if (number === "") {
+      errors.number = t("validation.numberRequired");
+    } else if (!/^\d+$/.test(number.toString())) {
+      errors.number = t("validation.numberInvalid");
+    } else if (number.length !== 10) {
+      errors.number = t("validation.numberInvalid");
+    }
+
+    if (firstname === "") {
+      errors.firstname = t("validation.firstnameRequired");
+    }
+
+    if (!lastname) {
+      errors.lastname = t("validation.lastnameRequired");
+    }
+
+    // if (!birthdate) {
+    //   errors.birthdate = "Password is required.";
+    // }
+
+    setErrors(errors);
+    setIsFormValid(Object.values(errors).filter((err) => err !== "").length === 0);
+  };
+
   const isStepOptional = (step: number) => {
     return step === 1;
   };
@@ -81,8 +149,16 @@ export default function BookingDialog({ open, onClose, locale }: any) {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
     }
+    if (activeStep === 1) {
+      validateForm();
+      console.log(isFormValid);
+      if (isFormValid) {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      }
+    } else {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
   };
 
@@ -118,6 +194,13 @@ export default function BookingDialog({ open, onClose, locale }: any) {
         setTimeout(() => {
           handleReset();
         }, 500);
+        setIsFormValid(false);
+        setFirstname("");
+        setLastname("");
+        setNumber("");
+        setBirthdate(dayjs());
+        setNext(false);
+        setErrors({ number: "", firstname: "", lastname: "", birthdate: "" });
       }}
       fullWidth
       maxWidth="md"
@@ -146,6 +229,7 @@ export default function BookingDialog({ open, onClose, locale }: any) {
         ) : (
           <></>
         )}
+        <CounterDown expiryTimestamp={new Date().setSeconds(new Date().getSeconds() + 30)} />
         {activeStep === steps.length ? (
           <Box sx={{ p: 2 }}>
             <Typography
@@ -431,77 +515,142 @@ export default function BookingDialog({ open, onClose, locale }: any) {
                       <FormTitle title={t("bookingDialog.step2.mobile")} />
                       <TextField
                         type="text"
-                        // value={options.impluse}
-                        // onChange={(e) => setOptions({ ...options, impluse: e.target.value })}
-                        fullWidth
-                      />
-                    </Box>
-                    <Box
-                      sx={{ display: "flex", gap: 2, flexDirection: { xs: "column", sm: "row" } }}
-                    >
-                      <Box sx={{ flex: 1 }}>
-                        <FormTitle title={t("bookingDialog.step2.firstname")} />
-                        <TextField
-                          type="text"
-                          // value={options.impluse}
-                          // onChange={(e) => setOptions({ ...options, impluse: e.target.value })}
-                          fullWidth
-                        />
-                      </Box>
-                      <Box sx={{ flex: 1 }}>
-                        <FormTitle title={t("bookingDialog.step2.lastname")} />
-                        <TextField
-                          type="text"
-                          // value={options.impluse}
-                          // onChange={(e) => setOptions({ ...options, impluse: e.target.value })}
-                          fullWidth
-                        />
-                      </Box>
-                    </Box>
-                    <Box
-                      sx={{ display: "flex", gap: 2, flexDirection: { xs: "column", sm: "row" } }}
-                    >
-                      <Box sx={{ flex: 1 }}>
-                        <FormTitle title={t("bookingDialog.step2.gender")} />
-                        <Select defaultValue={"0"} fullWidth>
-                          <MenuItem value={"0"}>ذكر</MenuItem>
-                          <MenuItem value={"1"}>انثى</MenuItem>
-                        </Select>
-                      </Box>
-                      <Box sx={{ flex: 1 }}>
-                        <FormTitle title={t("bookingDialog.step2.birthdate")} />
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DatePicker
-                            sx={{ width: "100%" }}
-                            // value={value}
-                            // onChange={(newValue) => setValue(newValue)}
-                          />
-                        </LocalizationProvider>
-                      </Box>
-                    </Box>
-                    <Box>
-                      <FormTitle title={t("bookingDialog.step2.howYouKnowUs")} />
-                      <Select defaultValue={"0"} fullWidth>
-                        <MenuItem value={"0"}> محرك البحث عبر الإنترنت (مثل Google وBing)</MenuItem>
-                        <MenuItem value={"1"}>وسائل التواصل الاجتماعي</MenuItem>
-                      </Select>
-                    </Box>
-                    <Box sx={{ display: "flex", width: "100%", justifyContent: "center", mt: 5 }}>
-                      <Button
-                        fullWidth={mobile < 600 ? true : false}
-                        variant="contained"
-                        color="primary"
-                        sx={{
-                          p: { xs: "8px 64px 8px 64px", md: "15px 160px 15px 160px" },
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 1,
+                        value={number}
+                        onChange={(e) => {
+                          setNumber(e.target.value);
+                          validateForm();
                         }}
-                        onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)}
-                      >
-                        <Typography>{t("bookingDialog.confirm")}</Typography>
-                        {locale === "en" ? <ArrowForward /> : <ArrowBack />}
-                      </Button>
+                        required
+                        fullWidth
+                        onBlur={validateForm}
+                        error={errors.number !== ""}
+                      />
+                      {errors.number && (
+                        <Typography color={"error"} fontSize={12}>
+                          {errors.number}
+                        </Typography>
+                      )}
+                    </Box>
+                    {next ? (
+                      <>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            gap: 2,
+                            flexDirection: { xs: "column", sm: "row" },
+                          }}
+                        >
+                          <Box sx={{ flex: 1 }}>
+                            <FormTitle title={t("bookingDialog.step2.firstname")} />
+                            <TextField
+                              type="text"
+                              value={firstname}
+                              onChange={(e) => setFirstname(e.target.value)}
+                              fullWidth
+                              onBlur={validateForm}
+                              error={errors.firstname !== ""}
+                            />
+                            {errors.firstname && (
+                              <Typography color={"error"} fontSize={12}>
+                                {errors.firstname}
+                              </Typography>
+                            )}
+                          </Box>
+                          <Box sx={{ flex: 1 }}>
+                            <FormTitle title={t("bookingDialog.step2.lastname")} />
+                            <TextField
+                              type="text"
+                              value={lastname}
+                              onChange={(e) => setLastname(e.target.value)}
+                              fullWidth
+                              onBlur={validateForm}
+                              error={errors.lastname !== ""}
+                            />
+                            {errors.lastname && (
+                              <Typography color={"error"} fontSize={12}>
+                                {errors.lastname}
+                              </Typography>
+                            )}
+                          </Box>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            gap: 2,
+                            flexDirection: { xs: "column", sm: "row" },
+                          }}
+                        >
+                          <Box sx={{ flex: 1 }}>
+                            <FormTitle title={t("bookingDialog.step2.gender")} />
+                            <Select defaultValue={"0"} fullWidth>
+                              <MenuItem value={"0"}>ذكر</MenuItem>
+                              <MenuItem value={"1"}>انثى</MenuItem>
+                            </Select>
+                          </Box>
+                          <Box sx={{ flex: 1 }}>
+                            <FormTitle title={t("bookingDialog.step2.birthdate")} />
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <DatePicker
+                                sx={{ width: "100%" }}
+                                value={birthdate}
+                                onChange={(newValue) => setBirthdate(newValue!)}
+                              />
+                            </LocalizationProvider>
+                            {errors.birthdate && <Typography>{errors.birthdate}</Typography>}
+                          </Box>
+                        </Box>
+                        <Box>
+                          <FormTitle title={t("bookingDialog.step2.howYouKnowUs")} />
+                          <Select defaultValue={"0"} fullWidth>
+                            <MenuItem value={"0"}>
+                              {" "}
+                              محرك البحث عبر الإنترنت (مثل Google وBing)
+                            </MenuItem>
+                            <MenuItem value={"1"}>وسائل التواصل الاجتماعي</MenuItem>
+                          </Select>
+                        </Box>
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                    <Box sx={{ display: "flex", width: "100%", justifyContent: "center", mt: 5 }}>
+                      {next ? (
+                        <Button
+                          fullWidth={mobile < 600 ? true : false}
+                          variant="contained"
+                          color="primary"
+                          sx={{
+                            p: { xs: "8px 64px 8px 64px", md: "15px 160px 15px 160px" },
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                          }}
+                          onClick={() => handleNext()}
+                        >
+                          <Typography>{t("bookingDialog.confirm")}</Typography>
+                          {locale === "en" ? <ArrowForward /> : <ArrowBack />}
+                        </Button>
+                      ) : (
+                        <Button
+                          fullWidth={mobile < 600 ? true : false}
+                          variant="contained"
+                          color="primary"
+                          sx={{
+                            p: { xs: "8px 64px 8px 64px", md: "15px 160px 15px 160px" },
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                          }}
+                          onClick={() => {
+                            if (numberValidation()) {
+                              setNext(true);
+                            }
+                          }}
+                        >
+                          <Typography>{t("bookingDialog.confirm")}</Typography>
+                          {locale === "en" ? <ArrowForward /> : <ArrowBack />}
+                        </Button>
+                      )}
                     </Box>
                     {/* <Typography sx={{ textAlign: "center", mt: 2 }}>
                       تسجيل الدخول باستخدام رقم هاتف آخر ? انقر هنا
@@ -538,8 +687,8 @@ export default function BookingDialog({ open, onClose, locale }: any) {
                     <TextField
                       type="text"
                       placeholder={t("bookingDialog.step3.placeholder")}
-                      // value={options.impluse}
-                      // onChange={(e) => setOptions({ ...options, impluse: e.target.value })}
+                      // value={name}
+                      // onChange={(e) => setName(e.target.value)}
                       sx={{ width: { xs: "100%", md: "70%" } }}
                     />
                     <Button

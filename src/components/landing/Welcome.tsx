@@ -83,6 +83,7 @@ export default function Welcome({ locale }: any) {
           width="max-content"
           locale={locale}
           href="/booking-an-appointment"
+          step="0"
         />
       </Box>
     </Box>

@@ -4,8 +4,9 @@ import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import i18nConfig from "@/i18nConfig";
-import { Select, MenuItem } from "@mui/material";
+import { Select, MenuItem, Box, Typography } from "@mui/material";
 import Cookies from "js-cookie";
+import TranslateIcon from "@mui/icons-material/Translate";
 
 export default function LanguageChanger() {
   const { i18n } = useTranslation();
@@ -13,8 +14,8 @@ export default function LanguageChanger() {
   const router = useRouter();
   const currentPathname = usePathname();
 
-  const handleChange = (e) => {
-    const newLocale = e.target.value;
+  const handleChange = (lang) => {
+    const newLocale = lang;
     console.log(currentLocale);
 
     // set cookie for next-i18n-router
@@ -36,15 +37,36 @@ export default function LanguageChanger() {
   };
 
   return (
-    <Select
-      size="small"
-      color="secondary"
-      sx={{ background: "#3FBDE6", borderRadius: "100px" }}
-      onChange={handleChange}
-      value={currentLocale}
-    >
-      <MenuItem value="en">{currentLocale == "en" ? "English" : "الإنكليزية"}</MenuItem>
-      <MenuItem value="ar">{currentLocale == "en" ? "Arabic" : "العربية"}</MenuItem>
-    </Select>
+    // <Select
+    //   size="small"
+    //   color="secondary"
+    //   sx={{ background: "#3FBDE6", borderRadius: "100px" }}
+    //   onChange={handleChange}
+    //   value={currentLocale}
+    // >
+    //   <MenuItem value="en">{currentLocale == "en" ? "English" : "الإنكليزية"}</MenuItem>
+    //   <MenuItem value="ar">{currentLocale == "en" ? "Arabic" : "العربية"}</MenuItem>
+    // </Select>
+    <>
+      <Box sx={{ cursor: "pointer" }}>
+        {currentLocale === "en" ? (
+          <Box
+            sx={{ display: "flex", alignItems: "center", gap: 0.5, px: 1, py: 0.5 }}
+            onClick={() => handleChange("ar")}
+          >
+            <TranslateIcon color="secondary" fontSize="small" />
+            <Typography color={"secondary"}>ARA</Typography>
+          </Box>
+        ) : (
+          <Box
+            sx={{ display: "flex", alignItems: "center", gap: 0.5, px: 1, py: 0.5 }}
+            onClick={() => handleChange("en")}
+          >
+            <TranslateIcon color="secondary" fontSize="small" />
+            <Typography color={"secondary"}>ENG</Typography>
+          </Box>
+        )}
+      </Box>
+    </>
   );
 }

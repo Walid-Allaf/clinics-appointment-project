@@ -1,12 +1,14 @@
 "use client";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import Image from "next/image";
 import { SpecialLink } from "..";
 import { TeamMember } from "@/src/types";
 import { useTranslation } from "react-i18next";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-export default function TeamMemberCard(teamMemberData: TeamMember) {
-  const { name, description, specialty, specialtyImg, teamMemberImg, locale } = teamMemberData;
+export default function TeamMemberCard(props: any) {
+  const { name, description, specialty, specialtyImg, teamMemberImg, locale, next } = props;
   const { t } = useTranslation();
 
   return (
@@ -110,14 +112,58 @@ export default function TeamMemberCard(teamMemberData: TeamMember) {
         </Typography>
 
         <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <SpecialLink
-            href="/doctor-information/doctor-name"
-            size="lg"
-            width="100%"
-            label={t("viewProfile")}
-            background="#fff"
-            locale={locale}
-          />
+          {next ? (
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={next}
+              sx={{
+                color: "#004B71",
+                // width: "auto",
+                width: "100%",
+                // display: "flex",
+                // alignItems: "center",
+                // justifyContent: "center",
+                // gap: 1,
+                borderRadius: "100px",
+                textDecoration: "none",
+                p: {
+                  xs: "14px 40px 14px 40px",
+                  lg: "14px 30px 14px 30px",
+                },
+                textWrap: "nowrap",
+                cursor: "pointer",
+                transition: ".3s ease-out",
+                // background: "#3FBDE6",
+                // "&:hover": {
+                //   background: "#3fbde6bb",
+                // },
+                boxShadow:
+                  " 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12)",
+                position: "relative",
+                zIndex: 99,
+              }}
+            >
+              <Typography sx={{ fontSize: "18px", fontWeight: 500, lineHeight: "20.09px" }}>
+                {t("viewProfile")}
+              </Typography>
+              {locale == "en" ? (
+                <ArrowForwardIcon htmlColor={"#004B71"} />
+              ) : (
+                <ArrowBackIcon htmlColor={"#004B71"} />
+              )}
+            </Button>
+          ) : (
+            <SpecialLink
+              href="/booking-an-appointment"
+              step="3"
+              size="lg"
+              width="100%"
+              label={t("viewProfile")}
+              background="#fff"
+              locale={locale}
+            />
+          )}
         </Box>
       </Box>
     </Box>

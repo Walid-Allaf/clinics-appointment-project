@@ -34,3 +34,10 @@ export type TeamMember = {
   description: string;
   locale?: string;
 };
+
+export type PatientInfo = {
+  number: string;
+  firstname: string;
+  lastname: string;
+  birthdate: string;
+};

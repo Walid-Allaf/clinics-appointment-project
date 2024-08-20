@@ -120,6 +120,8 @@ export default function SpecialtiesPage({ locale, next }: any) {
               locale={locale}
               size="lg"
               color="#fff"
+              href="#"
+              step="0"
             />
           </Box>
         </Grid>

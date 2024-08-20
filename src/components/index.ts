@@ -26,6 +26,7 @@ export { default as MapProvider } from "./common/MapProvider";
 export { default as MapComponent } from "./common/Map";
 
 export { default as BookingDialog } from "./booking-dialog/BookingDialog";
+export { default as CounterDown } from "./booking-dialog/CounterDown";
 
 export { default as Footer } from "./footer/Footer";
 

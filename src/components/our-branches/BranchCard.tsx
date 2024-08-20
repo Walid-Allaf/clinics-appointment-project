@@ -42,7 +42,14 @@ export default function BranchCard(props: Branches) {
       <Typography color="#fff" sx={{ fontSize: "14px", lineHeight: "17.5px", mb: 1 }}>
         {description}
       </Typography>
-      <SpecialLink label={t("viewMore")} size="lg" background="#fff" locale={locale} />
+      <SpecialLink
+        label={t("viewMore")}
+        size="lg"
+        background="#fff"
+        locale={locale}
+        href="/booking-an-appointment"
+        step="0"
+      />
     </Stack>
   );
 }
