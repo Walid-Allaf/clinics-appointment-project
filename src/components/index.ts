@@ -24,11 +24,14 @@ export { default as Title } from "./common/Title";
 export { default as Logo } from "./common/Logo";
 export { default as MapProvider } from "./common/MapProvider";
 export { default as MapComponent } from "./common/Map";
+export { default as Loading } from "./common/Loading";
 
 export { default as BookingDialog } from "./booking-dialog/BookingDialog";
 export { default as CounterDown } from "./booking-dialog/CounterDown";
 
 export { default as Footer } from "./footer/Footer";
+
+export { default as Img } from "./image/Img";
 
 // pages
 export { default as Clinics } from "./booking-steps/Clinics";

@@ -11,7 +11,7 @@
   "doctorsInformation": "معلومات الأطباء",
   "aboutUs": "معلومات عنا",
   "landing": {
-    "welcome": "مرحبا بكم في عيادة الشفاء الطبية",
+    "welcome": "مرحبا بكم في ",
     "title": "ابدأ رحلتك الصحية معنا اليوم! مع عيادة الشفاء الطبية",
     "feature1": "شبكة واسعة من الأطباء والعيادات",
     "feature2": "تجارب مرضى موثوقة",
@@ -83,6 +83,18 @@
     "specialty": "طبيب اسنان",
     "randomDoctorName": "اختيار طبيب عشوائي",
     "randomDescription": "جميع الاطباء لدينا يعملون في عيادة الشفاء الطبية في بغداد، متخصصون في الرعاية والتشخيصات القلبية المتقدمة."
+  },
+  "doctorDetailes": {
+    "aboutUs": "معلومات عنا",
+    "aboutTheDoctor": "حول الطبيب",
+    "speciality": "تخصص الطبيب",
+    "department": "القسم",
+    "branch": "الفرع",
+    "consultationDuration": "مدة الإستشارة",
+    "consultationDurationUnit": "دقيقة",
+    "workingDays": "أيام العمل",
+    "workingHours": "أوقات الدوام",
+    "bookAppointment": "احجز الموعد الآن"
   },
   "validation": {
     "numberInvalid": "الرقم غير صالح",

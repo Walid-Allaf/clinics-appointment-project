@@ -17,6 +17,7 @@
     "@mui/material-nextjs": "^5.16.6",
     "@mui/x-date-pickers": "^7.12.1",
     "@react-google-maps/api": "^2.19.3",
+    "axios": "^1.7.7",
     "dayjs": "^1.11.12",
     "i18next": "^23.12.2",
     "i18next-resources-to-backend": "^1.2.1",
@@ -32,6 +33,7 @@
     "swiper": "^11.1.9"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

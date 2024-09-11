@@ -1,39 +1,52 @@
 "use client";
-import { MapComponent, MapProvider, SpecialLink, SpecialtyCard, Title } from "@/src/components";
+import { Loading, MapComponent, MapProvider, SpecialLink, SpecialtyCard, Title } from "@/src/components";
 import { Container, Grid, Box, Typography } from "@mui/material";
-import { Contact, SpecialtiesItems, WorkDays } from "@/src/constants";
+import { Contact, WorkDays } from "@/src/constants";
 import ImageIcon from "@mui/icons-material/Image";
 import { useTranslation } from "react-i18next";
+import React from "react";
+import { apiRoutes, axios } from "@/src/api";
+import { AxiosResponse } from "axios";
+import { AllSpecialty } from "@/src/api/types";
 
 export default function SpecialtiesPage({ locale, next }: any) {
   const { t } = useTranslation();
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [specialities, setSpecialities] = React.useState<AllSpecialty>();
+
+  const getSpecialities = () => {
+    setLoading(true);
+    axios
+      .get(apiRoutes.website.GetAllSpecialty)
+      .then((response: AxiosResponse<AllSpecialty, any>) => {
+        setSpecialities(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error.message);
+        setLoading(false);
+      });
+  };
+
+  React.useEffect(() => {
+    getSpecialities();
+  }, []);
   return (
     <Container sx={{ marginTop: 4 }}>
       <Title text={t("specialityPage.pageTitle")} />
 
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: { xs: 0.65, sm: 2.5 },
-          justifyContent: "center",
-          mb: 4,
-        }}
-      >
-        {SpecialtiesItems.map((item, index) => {
-          return (
-            <Box onClick={next} key={index} sx={{ cursor: "pointer" }}>
-              <SpecialtyCard item={item} locale={locale} />
-            </Box>
-          );
-        })}
-        {SpecialtiesItems.map((item, index) => {
-          return (
-            <Box onClick={next} key={index} sx={{ cursor: "pointer" }}>
-              <SpecialtyCard item={item} locale={locale} />
-            </Box>
-          );
-        })}
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: { xs: 0.65, sm: 2.5 }, justifyContent: "center", mb: 4 }}>
+        {loading ? (
+          <Loading />
+        ) : (
+          specialities?.data.results.map((item, index) => {
+            return (
+              <Box onClick={next} key={index} sx={{ cursor: "pointer" }}>
+                <SpecialtyCard item={item} locale={locale} />
+              </Box>
+            );
+          })
+        )}
       </Box>
 
       <Typography
@@ -53,13 +66,7 @@ export default function SpecialtiesPage({ locale, next }: any) {
         {t("specialityPage.mapTitle")}
       </Typography>
 
-      <Grid
-        container
-        maxWidth="100%"
-        mb={4}
-        direction={{ xs: "column-reverse", sm: "row" }}
-        flexWrap={"nowrap"}
-      >
+      <Grid container maxWidth="100%" mb={4} direction={{ xs: "column-reverse", sm: "row" }} flexWrap={"nowrap"}>
         <Grid item xs={12} sm={5} md={4} lg={3}>
           <Box
             sx={{
@@ -74,9 +81,7 @@ export default function SpecialtiesPage({ locale, next }: any) {
               gap: 3,
             }}
           >
-            <Typography
-              sx={{ fontSize: "24px", fontWeight: 500, lineHeight: "28px", color: "#00D4FF" }}
-            >
+            <Typography sx={{ fontSize: "24px", fontWeight: 500, lineHeight: "28px", color: "#00D4FF" }}>
               {t("specialityPage.workDays")}
             </Typography>
             <Box>
@@ -88,11 +93,7 @@ export default function SpecialtiesPage({ locale, next }: any) {
                     justifyContent: "space-between",
                     alignItems: "center",
                     mb: 1,
-                    "& p": {
-                      fontSize: "12px",
-                      fontWeight: 500,
-                      lineHeight: "28px",
-                    },
+                    "& p": { fontSize: "12px", fontWeight: 500, lineHeight: "28px" },
                   }}
                 >
                   <Typography>{t("specialityPage." + workDay.day)}</Typography>
@@ -100,39 +101,21 @@ export default function SpecialtiesPage({ locale, next }: any) {
                 </Box>
               ))}
             </Box>
-            <Typography
-              sx={{ fontSize: "24px", fontWeight: 500, lineHeight: "28px", color: "#00D4FF" }}
-            >
+            <Typography sx={{ fontSize: "24px", fontWeight: 500, lineHeight: "28px", color: "#00D4FF" }}>
               {t("specialityPage.contactDetails")}
             </Typography>
             <Box>
               {Contact.map((contact, index) => (
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }} key={index}>
                   <ImageIcon />
-                  <Typography sx={{ fontSize: "12px", fontWeight: 500, lineHeight: "28px" }}>
-                    {contact}
-                  </Typography>
+                  <Typography sx={{ fontSize: "12px", fontWeight: 500, lineHeight: "28px" }}>{contact}</Typography>
                 </Box>
               ))}
             </Box>
-            <SpecialLink
-              label={t("specialityPage.bookAppointment")}
-              locale={locale}
-              size="lg"
-              color="#fff"
-              href="#"
-              step="0"
-            />
+            <SpecialLink label={t("specialityPage.bookAppointment")} locale={locale} size="lg" color="#fff" href="#" step="0" />
           </Box>
         </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={7}
-          md={8}
-          lg={9}
-          sx={{ "& iframe": { minHeight: { xs: "500px", sm: "100%" } }, minHeight: "500px" }}
-        >
+        <Grid item xs={12} sm={7} md={8} lg={9} sx={{ "& iframe": { minHeight: { xs: "500px", sm: "100%" } }, minHeight: "500px" }}>
           <iframe
             src="https://maps.google.com/maps?q=36.19980587168142,37.16299669311489&z=16&output=embed"
             height="100%"

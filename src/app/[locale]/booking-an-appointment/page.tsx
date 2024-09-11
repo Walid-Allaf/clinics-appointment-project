@@ -20,6 +20,7 @@ export default function BookingAnAppointment({ params: { locale } }: any) {
   const params = new URLSearchParams(searchParams);
   const [activeStep, setActiveStep] = React.useState(Number(params.get("step")) || 0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
+  let doctorId = React.useRef<string | undefined>();
 
   React.useEffect(() => {
     if (!Number(params.get("step"))) {
@@ -36,7 +37,8 @@ export default function BookingAnAppointment({ params: { locale } }: any) {
     return skipped.has(step);
   };
 
-  const handleNext = () => {
+  const handleNext = (id?: string) => {
+    doctorId.current = id;
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
@@ -73,7 +75,7 @@ export default function BookingAnAppointment({ params: { locale } }: any) {
     <Box>
       <Box sx={{ width: "100%", minHeight: "600px" }}>
         {activeStep === steps.length ? (
-          <DoctorInformation locale={locale} />
+          <DoctorInformation locale={locale} doctorId={doctorId.current} />
         ) : (
           <Container sx={{ marginTop: 4 }}>
             {activeStep === 0 && (

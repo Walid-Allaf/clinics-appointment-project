@@ -6,17 +6,17 @@ import { Box, Typography } from "@mui/material";
 import { SpecialtiesItem } from "@/src/types";
 import { useTranslation } from "react-i18next";
 
-export default function SpecialtyCard(props: { item: SpecialtiesItem; locale: any }) {
+export default function SpecialtyCard(props: { item: Specialty; locale: any }) {
   const {
-    item: { text, icon, path, width, height },
+    item: { specialtyId, specialtyName, specialtyNameEn },
     locale,
   } = props;
   const { t } = useTranslation();
   return (
     <Box
       component={Link}
-      href={path}
-      key={text}
+      href={"#"}
+      key={specialtyId}
       sx={{
         width: { xs: "169px", md: "253px" },
         height: { xs: "169px", md: "239px" },
@@ -56,11 +56,9 @@ export default function SpecialtyCard(props: { item: SpecialtiesItem; locale: an
             gap: "16px",
           }}
         >
-          <Box
-            sx={{ width: { xs: width - 18, md: width }, height: { xs: height - 18, md: height } }}
-          >
+          {/* <Box sx={{ width: { xs: width - 18, md: width }, height: { xs: height - 18, md: height } }}>
             <Image src={icon} alt={text} objectFit="cover" />
-          </Box>
+          </Box> */}
           <Typography
             sx={{
               fontSize: { xs: "20px", md: "24px" },
@@ -69,7 +67,7 @@ export default function SpecialtyCard(props: { item: SpecialtiesItem; locale: an
               color: "#fff",
             }}
           >
-            {t("specialityPage." + text)}
+            {locale === "ar" ? specialtyName : specialtyNameEn}
           </Typography>
         </Box>
       </Box>

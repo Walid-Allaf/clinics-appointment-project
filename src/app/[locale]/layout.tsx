@@ -11,6 +11,7 @@ import initTranslations from "../i18n";
 import TranslationsProvider from "../../components/common/TranslationsProvider";
 import { lang } from "@/src/types";
 import rtl_theme from "@/src/theme/rtl_theme";
+import { Suspense } from "react";
 
 const lexend = Lexend({
   weight: ["300", "400", "500", "700"],
@@ -40,16 +41,18 @@ export default async function RootLayout({
   return (
     <html lang={locale} dir={dir(locale)}>
       <body className={lexend.className}>
-        <AppRouterCacheProvider>
-          <ThemeProvider theme={dir(locale) == "ltr" ? ltr_theme : rtl_theme}>
-            <TranslationsProvider namespaces={i18nNamespaces} locale={locale} resources={resources}>
-              <Navbar locale={locale} />
-              {children}
-              <Footer locale={locale} />
-            </TranslationsProvider>
-          </ThemeProvider>
-          <CssBaseline />
-        </AppRouterCacheProvider>
+        <Suspense fallback="loading">
+          <AppRouterCacheProvider>
+            <ThemeProvider theme={dir(locale) == "ltr" ? ltr_theme : rtl_theme}>
+              <TranslationsProvider namespaces={i18nNamespaces} locale={locale} resources={resources}>
+                <Navbar locale={locale} />
+                {children}
+                <Footer locale={locale} />
+              </TranslationsProvider>
+            </ThemeProvider>
+            <CssBaseline />
+          </AppRouterCacheProvider>
+        </Suspense>
       </body>
     </html>
   );

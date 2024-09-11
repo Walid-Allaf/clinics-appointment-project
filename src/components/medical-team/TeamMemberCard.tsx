@@ -1,8 +1,7 @@
 "use client";
 import { Box, Typography, Button } from "@mui/material";
 import Image from "next/image";
-import { SpecialLink } from "..";
-import { TeamMember } from "@/src/types";
+import { Img, SpecialLink } from "..";
 import { useTranslation } from "react-i18next";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -19,11 +18,12 @@ export default function TeamMemberCard(props: any) {
         my: 3,
         position: "relative",
         background: "linear-gradient(180deg, #F1F1F1 -26.98%, #004B71 100%)",
+        minHeight: 500,
+        height: "100%",
       }}
     >
       <Box
         sx={{
-          px: 3,
           overflow: "hidden",
           "&:before": {
             content: '""',
@@ -38,18 +38,18 @@ export default function TeamMemberCard(props: any) {
           },
         }}
       >
-        <Image
-          alt={name}
-          src={teamMemberImg}
-          style={{
-            width: "100%",
-            height: "auto",
-            position: "relative",
-            bottom: "-5px",
-            zIndex: 2,
-            aspectRatio: "1 / 1.5",
+        <Box
+          sx={{
+            "& img": { width: "100%", height: "auto", position: "relative", bottom: "-5px", zIndex: 2, aspectRatio: "1 / 1.2" },
+            px: 2,
           }}
-        />
+        >
+          {typeof teamMemberImg === "string" ? (
+            <Img imageData={teamMemberImg} width={0} height={0} />
+          ) : (
+            <Image src={teamMemberImg} alt="team-member-img" />
+          )}
+        </Box>
       </Box>
       <Box
         sx={{
@@ -63,19 +63,10 @@ export default function TeamMemberCard(props: any) {
           flexDirection: "column",
           gap: 3,
           textAlign: "start",
+          height: "100%",
         }}
       >
-        <Image
-          alt={name}
-          src={specialtyImg}
-          width={100}
-          height={100}
-          style={{
-            position: "absolute",
-            top: "-50px",
-            zIndex: 2,
-          }}
-        />
+        <Image alt={name} src={specialtyImg} width={100} height={100} style={{ position: "absolute", top: "-50px", zIndex: 2 }} />
         <Typography
           sx={{
             fontSize: "16px",
@@ -84,6 +75,7 @@ export default function TeamMemberCard(props: any) {
             width: "max-content",
             color: "#00C0FF",
             position: "relative",
+            minHeight: 20,
           }}
         >
           <Box
@@ -91,12 +83,8 @@ export default function TeamMemberCard(props: any) {
             sx={{
               position: "absolute",
               bottom: "-10px",
-              "[dir=ltr]": {
-                right: "0px",
-              },
-              "[dir=rtl]": {
-                left: "0px",
-              },
+              "[dir=ltr]": { right: "0px" },
+              "[dir=rtl]": { left: "0px" },
               background: "#00C0FF",
               width: "150%",
               height: "2px",
@@ -104,10 +92,10 @@ export default function TeamMemberCard(props: any) {
           ></Box>
           {specialty}
         </Typography>
-        <Typography gutterBottom sx={{ fontSize: "20px", fontWeight: 500, lineHeight: "25px" }}>
+        <Typography gutterBottom sx={{ fontSize: "20px", fontWeight: 500, lineHeight: "25px", minHeight: 25 }}>
           {name}
         </Typography>
-        <Typography variant="body2" sx={{ fontSize: "12px", fontWeight: 400, lineHeight: "15px" }}>
+        <Typography variant="body2" sx={{ fontSize: "12px", fontWeight: 400, lineHeight: "15px", minHeight: 45 }}>
           {description}
         </Typography>
 
@@ -138,20 +126,13 @@ export default function TeamMemberCard(props: any) {
                 // "&:hover": {
                 //   background: "#3fbde6bb",
                 // },
-                boxShadow:
-                  " 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12)",
+                boxShadow: " 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12)",
                 position: "relative",
                 zIndex: 99,
               }}
             >
-              <Typography sx={{ fontSize: "18px", fontWeight: 500, lineHeight: "20.09px" }}>
-                {t("viewProfile")}
-              </Typography>
-              {locale == "en" ? (
-                <ArrowForwardIcon htmlColor={"#004B71"} />
-              ) : (
-                <ArrowBackIcon htmlColor={"#004B71"} />
-              )}
+              <Typography sx={{ fontSize: "18px", fontWeight: 500, lineHeight: "20.09px" }}>{t("viewProfile")}</Typography>
+              {locale == "en" ? <ArrowForwardIcon htmlColor={"#004B71"} /> : <ArrowBackIcon htmlColor={"#004B71"} />}
             </Button>
           ) : (
             <SpecialLink

@@ -1,21 +1,56 @@
 import { Box, Grid, Container } from "@mui/material";
-import {
-  ClinicOverview,
-  IncreasingNumbers,
-  MedicalTeam,
-  OurBranches,
-  SearchComponent,
-  Specialties,
-  Welcome,
-} from "../../components";
+import { ClinicOverview, IncreasingNumbers, MedicalTeam, OurBranches, SearchComponent, Specialties, Welcome } from "../../components";
 import Image from "next/image";
 import { HEROIMAGE } from "../../assets";
 import "../globals.css";
 import { Branches } from "../../constants";
-import initTranslations from "../i18n";
+import React from "react";
+import { notFound } from "next/navigation";
+import { apiRoutes } from "@/src/api";
+import { AllClinic, AllDoctor, AllSpecialty, MedicalCenterInfo } from "@/src/api/types";
+
+async function getMedicalInfo() {
+  let res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api${apiRoutes.website.GetMedicalCenterInfo}`, {
+    headers: { "Content-Type": "application/json", key: `${process.env.NEXT_PUBLIC_BASE_KEY}` },
+    cache: "force-cache",
+  });
+  let data: MedicalCenterInfo = await res.json();
+  if (!data) notFound();
+  return data;
+}
+async function getSpecialities() {
+  let res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api${apiRoutes.website.GetAllSpecialty}`, {
+    headers: { "Content-Type": "application/json", key: `${process.env.NEXT_PUBLIC_BASE_KEY}` },
+    cache: "force-cache",
+  });
+  let data: AllSpecialty = await res.json();
+  if (!data) notFound();
+  return data;
+}
+async function getClinics() {
+  let res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api${apiRoutes.website.GetAllClinic}`, {
+    headers: { "Content-Type": "application/json", key: `${process.env.NEXT_PUBLIC_BASE_KEY}` },
+    cache: "force-cache",
+  });
+  let data: AllClinic = await res.json();
+  if (!data) notFound();
+  return data;
+}
+async function getDoctors() {
+  let res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api${apiRoutes.website.GetAllDoctor}`, {
+    headers: { "Content-Type": "application/json", key: `${process.env.NEXT_PUBLIC_BASE_KEY}` },
+    cache: "force-cache",
+  });
+  let data: AllDoctor = await res.json();
+  if (!data) notFound();
+  return data;
+}
 
 export default async function Home({ params: { locale } }: any) {
-  const { t } = await initTranslations(locale, ["home"]);
+  let medicalInfo = await getMedicalInfo();
+  let specialities = await getSpecialities();
+  let clinics = await getClinics();
+  let doctors = await getDoctors();
   return (
     <Box>
       {/* *** LANDING *** */}
@@ -33,49 +68,15 @@ export default async function Home({ params: { locale } }: any) {
             minHeight: "calc(100vh - 70px)",
           }}
         >
-          <Grid container alignItems="center" justifyContent="space-between">
-            <Grid item xs={12} md={6}>
-              <Welcome locale={locale} />
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              md={6}
-              sx={{
-                position: { xs: "relative", md: "absolute" },
-                bottom: { xs: "auto", md: 0 },
-                "[dir=rtl] &": { left: { xs: "auto", md: "10px" } },
-                "[dir=ltr] &": { right: { xs: "auto", md: "10px" } },
-                mt: { xs: 2, md: 0 },
-                textAlign: { xs: "center", md: "right" },
-              }}
-            >
-              <Box
-                component={Image}
-                src={HEROIMAGE}
-                alt="Doctor"
-                sx={{ maxWidth: "100%", height: "auto" }}
-              />
-            </Grid>
-          </Grid>
+          <Welcome locale={locale} data={medicalInfo} />
         </Container>
       </Box>
       <SearchComponent />
-
-      {/* *** Specialties *** */}
-      <Specialties locale={locale} />
-
-      {/* *** Increasing numbers *** */}
+      <Specialties locale={locale} data={specialities} />
       <IncreasingNumbers />
-
-      {/* *** Our Clinic Branches *** */}
-      <OurBranches slides={Branches} locale={locale} />
-
-      {/* *** Clinic Overview *** */}
+      <OurBranches slides={clinics} locale={locale} />
       <ClinicOverview locale={locale} />
-
-      {/* *** Medical Team *** */}
-      <MedicalTeam locale={locale} />
+      <MedicalTeam locale={locale} data={doctors} />
     </Box>
   );
 }

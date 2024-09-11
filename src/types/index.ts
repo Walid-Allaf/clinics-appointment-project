@@ -22,7 +22,7 @@ export type statistic = {
 export type Branches = {
   title: string;
   description: string;
-  image: StaticImageData;
+  image: string;
   locale?: string;
 };
 

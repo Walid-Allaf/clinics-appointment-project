@@ -11,7 +11,7 @@
   "doctorsInformation": "Doctors Information",
   "aboutUs": "About Us",
   "landing": {
-    "welcome": "Welcome to [site name]",
+    "welcome": "Welcome to ",
     "title": "Start your health journey with us today! With the [site name]",
     "feature1": "A wide network of doctors and clinics",
     "feature2": "Easy search and booking",
@@ -83,6 +83,18 @@
     "specialty": "Medical specialty",
     "randomDoctorName": "Random Doctor Name",
     "randomDescription": "With over 15 years of experience, [Doctor's Name] is based at [Clinic Name] in [City]. Specializing in advanced cardiac care and diagnostics, [he/she] is fluent in both English and Arabic."
+  },
+  "doctorDetailes": {
+    "aboutUs": "About Us",
+    "aboutTheDoctor": "About The Doctor",
+    "speciality": "Speciality",
+    "department": "Department",
+    "branch": "Branch",
+    "consultationDuration": "Consultation Duration",
+    "consultationDurationUnit": "Minutes",
+    "workingDays": "Working Days",
+    "workingHours": "Working Hours",
+    "bookAppointment": "Book an Appointment"
   },
   "validation": {
     "numberInvalid": "Number is invalid",
