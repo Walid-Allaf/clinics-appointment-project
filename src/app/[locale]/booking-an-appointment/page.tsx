@@ -21,6 +21,7 @@ export default function BookingAnAppointment({ params: { locale } }: any) {
   const [activeStep, setActiveStep] = React.useState(Number(params.get("step")) || 0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
   let doctorId = React.useRef<string | undefined>();
+  let serviceId = React.useRef<string | undefined>();
 
   React.useEffect(() => {
     if (!Number(params.get("step"))) {
@@ -37,12 +38,20 @@ export default function BookingAnAppointment({ params: { locale } }: any) {
     return skipped.has(step);
   };
 
-  const handleNext = (id?: string) => {
-    doctorId.current = id;
+  const handleNext = (docId?: string, servId?: string) => {
+    doctorId.current = docId;
+    serviceId.current = servId;
+    console.log(docId);
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
+    }
+    if (typeof docId === "string") {
+      params.set("doctorId", docId);
+    }
+    if (typeof servId === "string") {
+      params.set("serviceId", servId);
     }
     params.set("step", (activeStep + 1).toString());
     push(`${pathname}?${params.toString()}`);
@@ -74,25 +83,22 @@ export default function BookingAnAppointment({ params: { locale } }: any) {
   return (
     <Box>
       <Box sx={{ width: "100%", minHeight: "600px" }}>
-        {activeStep === steps.length ? (
-          <DoctorInformation locale={locale} doctorId={doctorId.current} />
+        {activeStep === steps.length - 1 ? (
+          <DoctorInformation locale={locale} doctorId={doctorId.current} serviceId={serviceId.current} />
         ) : (
           <Container sx={{ marginTop: 4 }}>
             {activeStep === 0 && (
               <Box sx={{ width: "100%" }}>
-                <Clinics locale={locale} next={handleNext} />
+                {/* <Clinics locale={locale} next={handleNext} /> */}
+                <Specialty locale={locale} next={handleNext} />
               </Box>
             )}
             {activeStep === 1 && (
               <Box>
-                <Specialty locale={locale} next={handleNext} />
+                <Doctors locale={locale} next={handleNext} serviceId={serviceId.current} />
               </Box>
             )}
-            {activeStep === 2 && (
-              <Box maxWidth="100%">
-                <Doctors locale={locale} next={handleNext} />
-              </Box>
-            )}
+            {/* {activeStep === 2 && <Box maxWidth="100%"></Box>} */}
           </Container>
         )}
       </Box>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import {
   Dialog,
   Box,
@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 import { FormControl } from "@mui/material";
-import { Calendar } from "react-multi-date-picker";
+import { Calendar, DateObject } from "react-multi-date-picker";
 import "./CalendarComponentStyle.css";
 import { useWindow } from "@/src/hooks";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -33,11 +33,30 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useRouter } from "next/navigation";
 import { PatientInfo } from "@/src/types";
 import CounterDown from "./CounterDown";
+import { apiRoutes, axios } from "@/src/api";
+import Loading from "../common/Loading";
+import { Form, Formik } from "formik";
+import * as Yup from "yup";
+import InputField from "../text-field/InputField";
+import { LoadingButton } from "@mui/lab";
+import toast from "react-hot-toast";
+import SkeletonLoading from "../common/SkeletonLoading";
+import Cookies from "js-cookie";
 
-export default function BookingDialog({ open, onClose, locale }: any) {
+export default function BookingDialog({ open, onClose, locale }: BookingDialogProps) {
   const [tabValue, setTabValue] = useState(0);
   const { t } = useTranslation();
   const router = useRouter();
+
+  const BOOKINGTYPE = Number(Cookies.get("bookikngType")) || 0;
+
+  const ISOPEN = open.open;
+  const DOCID = open.doctorId;
+  const BOOKINGKIND = open.bookingKind;
+  const SERVICEID = open.serviceId;
+
+  const patientId = React.useRef<string | null>(null);
+  const otp = React.useRef<string | null>(null);
 
   const handleChange = (event: any, newValue: any) => {
     setTabValue(newValue);
@@ -64,13 +83,14 @@ export default function BookingDialog({ open, onClose, locale }: any) {
   const [skipped, setSkipped] = React.useState(new Set<number>());
   const mobile = useWindow(767);
 
-  const [date, setDate] = React.useState(dayjs().format("YYYY/MM/DD"));
-  const [time, setTime] = React.useState<{ name: string; id: string }>({
-    name: dates1[0].name,
-    id: dates1[0].id,
-  });
+  const [dateType0, setDateType0] = React.useState<string>("");
+  const [dateType1, setDateType1] = React.useState<string>("");
+  const [time, setTime] = React.useState<{ from: string; to: string }>({ from: "", to: "" });
 
-  const [next, setNext] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [data, setData] = useState<any>({});
+
+  const [next, setNext] = useState(true);
   const [number, setNumber] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -150,15 +170,9 @@ export default function BookingDialog({ open, onClose, locale }: any) {
       newSkipped.delete(activeStep);
     }
     if (activeStep === 1) {
-      validateForm();
       console.log(isFormValid);
-      if (isFormValid) {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-      }
-    } else {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
-
     setSkipped(newSkipped);
   };
 
@@ -183,12 +197,74 @@ export default function BookingDialog({ open, onClose, locale }: any) {
     setActiveStep(0);
   };
 
+  const getAvailableAppointmentCount = async () => {
+    setLoading(true);
+    await axios
+      .get(apiRoutes.website.GetAvailableAppointmentCount(DOCID))
+      .then((response) => {
+        setData(response.data.data);
+        if (Object.keys(response.data.data)[0]) {
+          setDateType1(Object.keys(response.data.data)[0].slice(0, 10));
+        } else toast.error("لايوجد مواعيد");
+        setLoading(false);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+        setLoading(false);
+      });
+  };
+  const getAvailableAppointmentTimes = async () => {
+    setLoading(true);
+    await axios
+      .get(apiRoutes.website.GetAvailableAppointmentTimes(DOCID))
+      .then((response) => {
+        setData(response.data.data);
+        if (Object.keys(response.data.data)[0]) {
+          setDateType1(Object.keys(response.data.data)[0].slice(0, 10));
+        } else toast.error("لايوجد مواعيد");
+        setLoading(false);
+
+        console.log("response.data.data", response.data.data[Object.keys(response.data.data)[0]].length);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    if (ISOPEN) {
+      if (BOOKINGKIND === 0) {
+        getAvailableAppointmentCount();
+      } else {
+        getAvailableAppointmentTimes();
+      }
+      console.log("open", ISOPEN);
+    }
+  }, []);
+
   const FormTitle = ({ title }: any) => {
     return <FormLabel sx={{ display: "block", mt: 2, mb: 1 }}>{title}</FormLabel>;
   };
+
+  const [wayKnowClinicLoading, setWayKnowClinicLoading] = useState(false);
+  const [wayKnowClinicData, setWayKnowClinicData] = useState<any>();
+  function getWayKnowClinic() {
+    setWayKnowClinicLoading(true);
+    axios
+      .get(apiRoutes.website.GetAllWayKnowClinic)
+      .then((res) => setWayKnowClinicData(res.data))
+      .catch((err) => toast.error(err.response.data.message))
+      .finally(() => setWayKnowClinicLoading(false));
+  }
+
+  React.useEffect(() => {
+    getWayKnowClinic();
+  }, []);
+
   return (
     <Dialog
-      open={open}
+      open={open.open}
       onClose={() => {
         onClose();
         setTimeout(() => {
@@ -199,7 +275,7 @@ export default function BookingDialog({ open, onClose, locale }: any) {
         setLastname("");
         setNumber("");
         setBirthdate(dayjs());
-        setNext(false);
+        setNext(true);
         setErrors({ number: "", firstname: "", lastname: "", birthdate: "" });
       }}
       fullWidth
@@ -207,10 +283,7 @@ export default function BookingDialog({ open, onClose, locale }: any) {
     >
       <Box sx={{ width: "100%", minHeight: "600px" }}>
         {activeStep !== steps.length ? (
-          <Stepper
-            activeStep={activeStep}
-            sx={{ background: "#004B71", color: "#fff", p: 2, display: { xs: "none", sm: "flex" } }}
-          >
+          <Stepper activeStep={activeStep} sx={{ background: "#004B71", color: "#fff", p: 2, display: { xs: "none", sm: "flex" } }}>
             {steps.map((label, index) => {
               const stepProps: { completed?: boolean } = {};
               const labelProps: {
@@ -229,7 +302,7 @@ export default function BookingDialog({ open, onClose, locale }: any) {
         ) : (
           <></>
         )}
-        <CounterDown expiryTimestamp={new Date().setSeconds(new Date().getSeconds() + 30)} />
+        <CounterDown expiryTimestamp={new Date().setSeconds(new Date().getSeconds() + 500)} />
         {activeStep === steps.length ? (
           <Box sx={{ p: 2 }}>
             <Typography
@@ -249,12 +322,7 @@ export default function BookingDialog({ open, onClose, locale }: any) {
               {t("bookingDialog.step4.title")}
             </Typography>
 
-            <Grid
-              container
-              maxWidth="100%"
-              direction={{ xs: "column-reverse", sm: "row" }}
-              flexWrap={"nowrap"}
-            >
+            <Grid container maxWidth="100%" direction={{ xs: "column-reverse", sm: "row" }} flexWrap={"nowrap"}>
               <Grid item xs={12} sm={5} md={4} lg={3}>
                 <Box
                   sx={{
@@ -267,11 +335,10 @@ export default function BookingDialog({ open, onClose, locale }: any) {
                     display: "flex",
                     flexDirection: "column",
                     gap: 2,
+                    justifyContent: "space-between",
                   }}
                 >
-                  <Typography
-                    sx={{ fontSize: "24px", fontWeight: 500, lineHeight: "28px", color: "#00D4FF" }}
-                  >
+                  <Typography sx={{ fontSize: "24px", fontWeight: 500, lineHeight: "28px", color: "#00D4FF" }}>
                     {t("bookingDialog.step4.book")}
                   </Typography>
                   <Box sx={{ "& p": { fontSize: "12px", fontWeight: 500, lineHeight: "28px" } }}>
@@ -284,9 +351,9 @@ export default function BookingDialog({ open, onClose, locale }: any) {
                       }}
                     >
                       <Typography>{t("bookingDialog.step4.bookDate")}</Typography>
-                      <Typography>{date}</Typography>
+                      <Typography>{BOOKINGTYPE === 0 ? dateType1 : dateType0}</Typography>
                     </Box>
-                    <Box
+                    {/* <Box
                       sx={{
                         display: "flex",
                         justifyContent: "space-between",
@@ -296,30 +363,20 @@ export default function BookingDialog({ open, onClose, locale }: any) {
                     >
                       <Typography>{t("bookingDialog.step4.day")}</Typography>
                       <Typography>{DaysOfWeek[dayjs(date).day()]}</Typography>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        mb: 1,
-                      }}
-                    >
-                      <Typography>{t("bookingDialog.step4.time")}</Typography>
-                      <Typography>{time.name}</Typography>
-                    </Box>
+                    </Box> */}
+                    {BOOKINGTYPE !== 0 && (
+                      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
+                        <Typography>{t("bookingDialog.step4.time")}</Typography>
+                        <Typography>{time.from.slice(0, 5)}</Typography>
+                      </Box>
+                    )}
                   </Box>
-                  <Typography
-                    sx={{ fontSize: "24px", fontWeight: 500, lineHeight: "28px", color: "#00D4FF" }}
-                  >
+                  {/* <Typography sx={{ fontSize: "24px", fontWeight: 500, lineHeight: "28px", color: "#00D4FF" }}>
                     {t("bookingDialog.step4.info")}
-                  </Typography>
-                  <Box>
+                  </Typography> */}
+                  {/* <Box>
                     {Contact.map((contact, index) => (
-                      <Box
-                        sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}
-                        key={index}
-                      >
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }} key={index}>
                         <ImageIcon />
                         <Typography
                           sx={{
@@ -332,8 +389,8 @@ export default function BookingDialog({ open, onClose, locale }: any) {
                         </Typography>
                       </Box>
                     ))}
-                  </Box>
-                  <Button
+                  </Box> */}
+                  {/* <Button
                     variant="outlined"
                     color="secondary"
                     sx={{
@@ -346,20 +403,13 @@ export default function BookingDialog({ open, onClose, locale }: any) {
                   >
                     <Typography>{t("bookingDialog.step4.addToCalendar")}</Typography>
                     <CalendarMonthIcon />
-                  </Button>
+                  </Button> */}
                   <Button variant="contained" color="secondary" onClick={() => router.push("/")}>
                     {t("bookingDialog.step4.agree")}
                   </Button>
                 </Box>
               </Grid>
-              <Grid
-                item
-                xs={12}
-                sm={7}
-                md={8}
-                lg={9}
-                sx={{ "& iframe": { minHeight: { xs: "500px", sm: "100%" } }, minHeight: "500px" }}
-              >
+              <Grid item xs={12} sm={7} md={8} lg={9} sx={{ "& iframe": { minHeight: { xs: "500px", sm: "100%" } }, minHeight: "500px" }}>
                 <iframe
                   src="https://maps.google.com/maps?q=36.19980587168142,37.16299669311489&z=16&output=embed"
                   height="100%"
@@ -372,127 +422,254 @@ export default function BookingDialog({ open, onClose, locale }: any) {
           <React.Fragment>
             {activeStep === 0 && (
               <Box sx={{ width: "100%" }}>
-                <Typography
-                  sx={{
-                    fontSize: { xs: "18px", sm: "26px" },
-                    fontWeight: 700,
-                    lineHeight: "28px",
-                    textAlign: "center",
-                    py: 1,
-                    color: { xs: "#fff", sm: "#004B71" },
-                    background: { xs: "#004B71", sm: "transparent" },
-                  }}
-                >
-                  {t("bookingDialog.step1.title")}
-                </Typography>
-                <FormControl sx={{ background: "#f5f5f5" }} fullWidth>
-                  <Calendar
-                    shadow={false}
-                    numberOfMonths={mobile < 600 ? 1 : 2}
-                    className="calendar"
-                    onChange={(e) => setDate(e!.toString())}
-                  />
-                </FormControl>
-                <Box sx={{ p: 2 }}>
-                  <Typography sx={{ py: 1 }}>{t("bookingDialog.step1.morning")}</Typography>
-                  <RadioGroup
-                    sx={{ display: "flex", flexDirection: "row", gap: 1, "[dir=ltr] &": { px: 1 } }}
+                {BOOKINGKIND === 1 && (
+                  <Typography
+                    sx={{
+                      fontSize: { xs: "18px", sm: "26px" },
+                      fontWeight: 700,
+                      lineHeight: "28px",
+                      textAlign: "center",
+                      py: 1,
+                      color: { xs: "#fff", sm: "#004B71" },
+                      background: { xs: "#004B71", sm: "transparent" },
+                    }}
                   >
-                    {dates1.map((el, index) => (
-                      <FormControlLabel
-                        key={index}
-                        name="time"
-                        control={<Radio sx={{ display: "none" }} name={el.name} />}
-                        label={el.name}
-                        sx={{
-                          userSelect: "none",
-                          "& span": {
-                            fontSize: { xs: "12px", sm: "20px" },
-                            borderRadius: "100px",
-                            // color: "#FFF",
-                            backgroundColor: time.id === el.id ? "#004B71" : "#F3F2F5",
-                            color: time.id === el.id ? "#fff" : "#000",
-                            px: 6,
-                            py: 0.5,
-                          },
-                        }}
-                        onClick={() => {
-                          setTime(el);
-                        }}
-                      />
-                    ))}
-                  </RadioGroup>
-                  <Typography sx={{ py: 1 }}>{t("bookingDialog.step1.afternon")}</Typography>
-                  <RadioGroup
-                    sx={{ display: "flex", flexDirection: "row", gap: 1, "[dir=ltr] &": { px: 1 } }}
-                  >
-                    {dates2.map((el, index) => (
-                      <FormControlLabel
-                        key={index}
-                        name="time"
-                        control={<Radio sx={{ display: "none" }} name={el.name} />}
-                        label={el.name}
-                        sx={{
-                          userSelect: "none",
-                          "& span": {
-                            fontSize: { xs: "12px", sm: "20px" },
-                            borderRadius: "100px",
-                            // color: "#FFF",
-                            backgroundColor: time.id === el.id ? "#004B71" : "#F3F2F5",
-                            color: time.id === el.id ? "#fff" : "#000",
-                            px: 6,
-                            py: 0.5,
-                          },
-                        }}
-                        onClick={() => {
-                          setTime(el);
-                        }}
-                      />
-                    ))}
-                  </RadioGroup>
-                  <Typography sx={{ py: 1 }}>{t("bookingDialog.step1.night")}</Typography>
-                  <RadioGroup
-                    sx={{ display: "flex", flexDirection: "row", gap: 1, "[dir=ltr] &": { px: 1 } }}
-                  >
-                    {dates3.map((el, index) => (
-                      <FormControlLabel
-                        key={index}
-                        name="time"
-                        control={<Radio sx={{ display: "none" }} name={el.name} />}
-                        label={el.name}
-                        sx={{
-                          userSelect: "none",
-                          "& span": {
-                            fontSize: { xs: "12px", sm: "20px" },
-                            borderRadius: "100px",
-                            // color: "#FFF",
-                            backgroundColor: time.id === el.id ? "#004B71" : "#F3F2F5",
-                            color: time.id === el.id ? "#fff" : "#000",
-                            px: 6,
-                            py: 0.5,
-                          },
-                        }}
-                        onClick={() => {
-                          setTime(el);
-                        }}
-                      />
-                    ))}
-                  </RadioGroup>
+                    {t("bookingDialog.step1.title")}
+                  </Typography>
+                )}
+                {loading ? (
+                  <Loading />
+                ) : (
+                  <FormControl sx={{ background: BOOKINGKIND === 1 ? "#f5f5f5" : "#fff" }} fullWidth>
+                    <>
+                      {BOOKINGTYPE === 0 && (
+                        <>
+                          <Calendar
+                            buttons={false}
+                            shadow={false}
+                            numberOfMonths={mobile < 600 ? 1 : 2}
+                            className="calendar"
+                            onChange={(e) => {
+                              setDateType0(e!.format("YYYY-MM-DD").toString());
+                              setTime({ from: "", to: "" });
+                              console.log(time);
+                            }}
+                            mapDays={({ date }) => {
+                              let isAvailable = Object.keys(data || {})
+                                .map((el) => el.slice(0, 10))
+                                .includes(date.toDate().toISOString().slice(0, 10));
+                              if (!isAvailable) return { disabled: true, style: { color: "#ccc" }, onClick: () => alert("un available") };
+                            }}
+                          />
+                          <>
+                            {BOOKINGKIND === 1 && (
+                              <Box sx={{ p: 2 }}>
+                                <Typography sx={{ py: 1 }}>{t("bookingDialog.step1.morning")}</Typography>
+                                <RadioGroup sx={{ display: "flex", flexDirection: "row", gap: 1, "[dir=ltr] &": { px: 1 } }}>
+                                  {dateType0 &&
+                                    data[Object.keys(data).filter((key) => key.slice(0, 10) === dateType0)[0]]
+                                      .filter((ele: any) => ele.shift === 0)
+                                      .map((el: any, index: number) => (
+                                        <FormControlLabel
+                                          key={index}
+                                          name="time"
+                                          control={<Radio sx={{ display: "none" }} name={el.from.slice(0, 5)} />}
+                                          label={el.from.slice(0, 5)}
+                                          sx={{
+                                            userSelect: "none",
+                                            "& span": {
+                                              fontSize: { xs: "12px", sm: "16px" },
+                                              borderRadius: "100px",
+                                              // color: "#FFF",
+                                              backgroundColor: time.from.slice(0, 5) === el.from.slice(0, 5) ? "#004B71" : "#F3F2F5",
+                                              color: time.from.slice(0, 5) === el.from.slice(0, 5) ? "#fff" : "#000",
+                                              px: 6,
+                                              py: 0.5,
+                                            },
+                                          }}
+                                          onClick={() => setTime(el)}
+                                        />
+                                      ))}
+                                </RadioGroup>
+                                <Typography sx={{ py: 1 }}>{t("bookingDialog.step1.night")}</Typography>
+                                <RadioGroup sx={{ display: "flex", flexDirection: "row", gap: 1, "[dir=ltr] &": { px: 1 } }}>
+                                  {dateType0 &&
+                                    data[Object.keys(data).filter((key) => key.slice(0, 10) === dateType0)[0]]
+                                      .filter((ele: any) => ele.shift === 1)
+                                      .map((el: any, index: number) => (
+                                        <FormControlLabel
+                                          key={index}
+                                          name="time"
+                                          control={<Radio sx={{ display: "none" }} name={el.from.slice(0, 5)} />}
+                                          label={el.from.slice(0, 5)}
+                                          sx={{
+                                            userSelect: "none",
+                                            "& span": {
+                                              fontSize: { xs: "12px", sm: "16px" },
+                                              borderRadius: "100px",
+                                              // color: "#FFF",
+                                              backgroundColor: time.from.slice(0, 5) === el.from.slice(0, 5) ? "#004B71" : "#F3F2F5",
+                                              color: time.from.slice(0, 5) === el.from.slice(0, 5) ? "#fff" : "#000",
+                                              px: 6,
+                                              py: 0.5,
+                                            },
+                                          }}
+                                          onClick={() => setTime(el)}
+                                        />
+                                      ))}
+                                </RadioGroup>
+                              </Box>
+                            )}
 
-                  <Button
-                    fullWidth={mobile < 600 ? true : false}
-                    variant="contained"
-                    color="primary"
-                    sx={{ mt: 2, p: { xs: "8px 64px 8px 64px", md: "15px 160px 15px 160px" } }}
-                    onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)}
-                  >
-                    {mobile < 600
-                      ? t("bookingDialog.confirm")
-                      : `${t("bookingDialog.step1.book")}: ${date} - ${time.name}`}
-                  </Button>
-                </Box>
+                            {BOOKINGKIND === 0 && (
+                              <Button
+                                disabled={!dateType0}
+                                variant="contained"
+                                color="primary"
+                                sx={{ alignSelf: "center", my: 2, p: { xs: "8px 64px 8px 64px", md: "15px 160px 15px 160px" } }}
+                                onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)}
+                              >
+                                {mobile < 600 ? t("bookingDialog.confirm") : `${t("bookingDialog.step1.book")}: ${dateType0}`}
+                              </Button>
+                            )}
+                            {BOOKINGKIND === 1 && (
+                              <Button
+                                disabled={!dateType0 || !time.from}
+                                variant="contained"
+                                color="primary"
+                                sx={{ alignSelf: "center", my: 2, p: { xs: "8px 64px 8px 64px", md: "15px 160px 15px 160px" } }}
+                                onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)}
+                              >
+                                {mobile < 600
+                                  ? t("bookingDialog.confirm")
+                                  : `${t("bookingDialog.step1.book")}: ${dateType0} - ${time.from.slice(0, 5)}`}
+                              </Button>
+                            )}
+                          </>
+                        </>
+                      )}
+                      {BOOKINGTYPE === 1 && (
+                        <>
+                          <Box>
+                            <Typography
+                              sx={{
+                                fontSize: { xs: "18px", sm: "26px" },
+                                fontWeight: 700,
+                                lineHeight: "28px",
+                                p: 2,
+                                color: { xs: "#fff", sm: "#004B71" },
+                                background: { xs: "#004B71", sm: "transparent" },
+                              }}
+                            >
+                              سيتم حجز الموعد بتاريخ {dateType1}
+                            </Typography>
+                          </Box>
+                          {BOOKINGKIND === 1 && (
+                            <>
+                              {dateType1 ? (
+                                <Box sx={{ p: 2 }}>
+                                  <Typography sx={{ py: 1 }}>{t("bookingDialog.step1.morning")}</Typography>
+                                  <RadioGroup sx={{ display: "flex", flexDirection: "row", gap: 1, "[dir=ltr] &": { px: 1 } }}>
+                                    {data[Object.keys(data)[0]].length !== 0 ? (
+                                      data[Object.keys(data).filter((key) => key.slice(0, 10) === dateType1)[0]]
+                                        .filter((ele: any) => ele.shift === 0)
+                                        .map((el: any, index: number) => (
+                                          <FormControlLabel
+                                            key={index}
+                                            name="time"
+                                            control={<Radio sx={{ display: "none" }} name={el.from.slice(0, 5)} />}
+                                            label={el.from.slice(0, 5)}
+                                            sx={{
+                                              userSelect: "none",
+                                              "& span": {
+                                                fontSize: { xs: "12px", sm: "20px" },
+                                                borderRadius: "100px",
+                                                // color: "#FFF",
+                                                backgroundColor: time.from.slice(0, 5) === el.from.slice(0, 5) ? "#004B71" : "#F3F2F5",
+                                                color: time.from.slice(0, 5) === el.from.slice(0, 5) ? "#fff" : "#000",
+                                                px: 6,
+                                                py: 0.5,
+                                              },
+                                            }}
+                                            onClick={() => setTime(el)}
+                                          />
+                                        ))
+                                    ) : (
+                                      <Typography>لايوجد مواعيد</Typography>
+                                    )}
+                                  </RadioGroup>
+                                  <Typography sx={{ py: 1 }}>{t("bookingDialog.step1.night")}</Typography>
+                                  <RadioGroup sx={{ display: "flex", flexDirection: "row", gap: 1, "[dir=ltr] &": { px: 1 } }}>
+                                    {data[Object.keys(data)[0]].length !== 0 ? (
+                                      data[Object.keys(data).filter((key) => key.slice(0, 10) === dateType1)[0]]
+                                        .filter((ele: any) => ele.shift === 1)
+                                        .map((el: any, index: number) => (
+                                          <FormControlLabel
+                                            key={index}
+                                            name="time"
+                                            control={<Radio sx={{ display: "none" }} name={el.from.slice(0, 5)} />}
+                                            label={el.from.slice(0, 5)}
+                                            sx={{
+                                              userSelect: "none",
+                                              "& span": {
+                                                fontSize: { xs: "12px", sm: "20px" },
+                                                borderRadius: "100px",
+                                                // color: "#FFF",
+                                                backgroundColor: time.from.slice(0, 5) === el.from.slice(0, 5) ? "#004B71" : "#F3F2F5",
+                                                color: time.from.slice(0, 5) === el.from.slice(0, 5) ? "#fff" : "#000",
+                                                px: 6,
+                                                py: 0.5,
+                                              },
+                                            }}
+                                            onClick={() => setTime(el)}
+                                          />
+                                        ))
+                                    ) : (
+                                      <Typography>لايوجد مواعيد</Typography>
+                                    )}
+                                  </RadioGroup>
+                                </Box>
+                              ) : (
+                                "no appoitments"
+                              )}
+                            </>
+                          )}
+                          {BOOKINGKIND === 0 && (
+                            <Box sx={{ display: "grid", placeItems: "center", minHeight: 400, alignSelf: "center" }}>
+                              <Button
+                                fullWidth={mobile < 600 ? true : false}
+                                variant="contained"
+                                disabled={!data[Object.keys(data)[0]]}
+                                color="primary"
+                                sx={{ my: 2, p: { xs: "8px 64px 8px 64px", md: "15px 160px 15px 160px" } }}
+                                onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)}
+                              >
+                                {mobile < 600 ? t("bookingDialogg.confirm") : `${t("bookingDialog.step1.book")}: ${dateType1}`}
+                              </Button>
+                            </Box>
+                          )}
+                          {BOOKINGKIND === 1 && (
+                            <Button
+                              fullWidth={mobile < 600 ? true : false}
+                              disabled={!time.from}
+                              variant="contained"
+                              color="primary"
+                              sx={{ alignSelf: "center", my: 2, p: { xs: "8px 64px 8px 64px", md: "15px 160px 15px 160px" } }}
+                              onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)}
+                            >
+                              {mobile < 600
+                                ? t("bookingDialog.confirm")
+                                : `${t("bookingDialog.step1.book")}: ${dateType0} - ${time.from.slice(0, 5)}`}
+                            </Button>
+                          )}
+                        </>
+                      )}
+                    </>
+                  </FormControl>
+                )}
               </Box>
             )}
+            {/* ********************************************************************************************* */}
             {activeStep === 1 && (
               <Box>
                 <Typography
@@ -509,153 +686,154 @@ export default function BookingDialog({ open, onClose, locale }: any) {
                 >
                   {t("bookingDialog.step2.title")}
                 </Typography>
-                <Box>
-                  <Box maxWidth="100%" p={{ xs: 2, sm: 4 }}>
-                    <Box>
-                      <FormTitle title={t("bookingDialog.step2.mobile")} />
-                      <TextField
-                        type="text"
-                        value={number}
-                        onChange={(e) => {
-                          setNumber(e.target.value);
-                          validateForm();
-                        }}
-                        required
-                        fullWidth
-                        onBlur={validateForm}
-                        error={errors.number !== ""}
-                      />
-                      {errors.number && (
-                        <Typography color={"error"} fontSize={12}>
-                          {errors.number}
-                        </Typography>
-                      )}
-                    </Box>
-                    {next ? (
-                      <>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            gap: 2,
-                            flexDirection: { xs: "column", sm: "row" },
-                          }}
-                        >
-                          <Box sx={{ flex: 1 }}>
-                            <FormTitle title={t("bookingDialog.step2.firstname")} />
-                            <TextField
-                              type="text"
-                              value={firstname}
-                              onChange={(e) => setFirstname(e.target.value)}
-                              fullWidth
-                              onBlur={validateForm}
-                              error={errors.firstname !== ""}
-                            />
-                            {errors.firstname && (
-                              <Typography color={"error"} fontSize={12}>
-                                {errors.firstname}
-                              </Typography>
+                <Box p={{ xs: "0 16px 16px 16px", sm: "0 32px 32px 32px" }}>
+                  <Formik
+                    validationSchema={schema}
+                    enableReinitialize
+                    initialValues={{
+                      id: "",
+                      name: "",
+                      phoneNumber: "",
+                      birthdate: dayjs().toISOString(),
+                      gender: 0,
+                      address: "",
+                      wayKnowClinicId: null,
+                      otp: "",
+                    }}
+                    onSubmit={async (values) => {
+                      console.log(values);
+                      axios
+                        .get(apiRoutes.website.CheckPatient(values.name, values.phoneNumber, values.birthdate))
+                        .then((res) => {
+                          patientId.current = res.data.data.id;
+                          handleNext();
+                        })
+                        .catch((err) => toast.error(err.response.data.message))
+                        .finally(() => {});
+                    }}
+                  >
+                    {({ handleSubmit, values, setFieldValue, setFieldTouched, setFieldError }) => (
+                      <Form onSubmit={handleSubmit}>
+                        <InputField name="phoneNumber" label={t("bookingDialog.step2.mobile")} focused />
+
+                        <Box maxWidth="100%">
+                          {next ? (
+                            <>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  gap: 2,
+                                  flexDirection: { xs: "column", sm: "row" },
+                                }}
+                              >
+                                <Box sx={{ flex: 1 }}>
+                                  <InputField name="name" label={t("bookingDialog.step2.firstname")} />
+                                </Box>
+                                <Box sx={{ flex: 1 }}>
+                                  <InputField name="address" label={t("bookingDialog.step2.address")} />
+                                </Box>
+                              </Box>
+                              <Box sx={{ display: "flex", gap: 2, flexDirection: { xs: "column", sm: "row" } }}>
+                                <Box sx={{ flex: 1 }}>
+                                  <FormTitle title={t("bookingDialog.step2.gender")} />
+                                  <Select
+                                    onChange={(e) => setFieldValue("gender", e.target.value)}
+                                    size="small"
+                                    value={values.gender}
+                                    fullWidth
+                                  >
+                                    <MenuItem value={0}>ذكر</MenuItem>
+                                    <MenuItem value={1}>انثى</MenuItem>
+                                  </Select>
+                                </Box>
+                                <Box sx={{ flex: 1 }}>
+                                  <FormTitle title={t("bookingDialog.step2.birthdate")} />
+                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DatePicker
+                                      sx={{ width: "100%", "& input": { py: 1 } }}
+                                      value={birthdate}
+                                      onChange={(newValue) => setFieldValue("birthdate", newValue!.toISOString())}
+                                    />
+                                  </LocalizationProvider>
+                                  {errors.birthdate && <Typography>{errors.birthdate}</Typography>}
+                                </Box>
+                              </Box>
+                              <Box>
+                                <FormTitle title={t("bookingDialog.step2.howYouKnowUs")} />
+                                {wayKnowClinicLoading ? (
+                                  <SkeletonLoading />
+                                ) : (
+                                  <Select
+                                    value={values.wayKnowClinicId}
+                                    fullWidth
+                                    size="small"
+                                    onChange={(event) => setFieldValue("wayKnowClinicId", event.target.value)}
+                                  >
+                                    {wayKnowClinicData
+                                      ? wayKnowClinicData.data.results.map((wayKnowClinic: any, i: number) => {
+                                          return (
+                                            <MenuItem key={i} value={wayKnowClinic.id}>
+                                              {wayKnowClinic.text}
+                                            </MenuItem>
+                                          );
+                                        })
+                                      : []}
+                                  </Select>
+                                )}
+                              </Box>
+                            </>
+                          ) : (
+                            <></>
+                          )}
+                          <Box sx={{ display: "flex", width: "100%", justifyContent: "center", mt: 5 }}>
+                            {next ? (
+                              <Button
+                                fullWidth={mobile < 600 ? true : false}
+                                variant="contained"
+                                color="primary"
+                                sx={{
+                                  p: { xs: "8px 64px 8px 64px", md: "15px 160px 15px 160px" },
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 1,
+                                }}
+                                type="submit"
+                                // onClick={handleSubmit}
+                              >
+                                <Typography>{t("bookingDialog.confirm")}</Typography>
+                                {locale === "en" ? <ArrowForward /> : <ArrowBack />}
+                              </Button>
+                            ) : (
+                              <>
+                                <Button
+                                  fullWidth={mobile < 600 ? true : false}
+                                  variant="contained"
+                                  color="primary"
+                                  sx={{
+                                    p: { xs: "8px 64px 8px 64px", md: "15px 160px 15px 160px" },
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 1,
+                                  }}
+                                  onClick={() => {
+                                    if (values.phoneNumber !== "") {
+                                      setNext(true);
+                                    } else {
+                                      // setFieldError("mobile", "");
+                                      toast.error("رقم الموبايل مطلوب");
+                                    }
+                                  }}
+                                >
+                                  <Typography>{t("bookingDialog.continue")}</Typography>
+                                  {locale === "en" ? <ArrowForward /> : <ArrowBack />}
+                                </Button>
+                              </>
                             )}
                           </Box>
-                          <Box sx={{ flex: 1 }}>
-                            <FormTitle title={t("bookingDialog.step2.lastname")} />
-                            <TextField
-                              type="text"
-                              value={lastname}
-                              onChange={(e) => setLastname(e.target.value)}
-                              fullWidth
-                              onBlur={validateForm}
-                              error={errors.lastname !== ""}
-                            />
-                            {errors.lastname && (
-                              <Typography color={"error"} fontSize={12}>
-                                {errors.lastname}
-                              </Typography>
-                            )}
-                          </Box>
                         </Box>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            gap: 2,
-                            flexDirection: { xs: "column", sm: "row" },
-                          }}
-                        >
-                          <Box sx={{ flex: 1 }}>
-                            <FormTitle title={t("bookingDialog.step2.gender")} />
-                            <Select defaultValue={"0"} fullWidth>
-                              <MenuItem value={"0"}>ذكر</MenuItem>
-                              <MenuItem value={"1"}>انثى</MenuItem>
-                            </Select>
-                          </Box>
-                          <Box sx={{ flex: 1 }}>
-                            <FormTitle title={t("bookingDialog.step2.birthdate")} />
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              <DatePicker
-                                sx={{ width: "100%" }}
-                                value={birthdate}
-                                onChange={(newValue) => setBirthdate(newValue!)}
-                              />
-                            </LocalizationProvider>
-                            {errors.birthdate && <Typography>{errors.birthdate}</Typography>}
-                          </Box>
-                        </Box>
-                        <Box>
-                          <FormTitle title={t("bookingDialog.step2.howYouKnowUs")} />
-                          <Select defaultValue={"0"} fullWidth>
-                            <MenuItem value={"0"}>
-                              {" "}
-                              محرك البحث عبر الإنترنت (مثل Google وBing)
-                            </MenuItem>
-                            <MenuItem value={"1"}>وسائل التواصل الاجتماعي</MenuItem>
-                          </Select>
-                        </Box>
-                      </>
-                    ) : (
-                      <></>
+                      </Form>
                     )}
-                    <Box sx={{ display: "flex", width: "100%", justifyContent: "center", mt: 5 }}>
-                      {next ? (
-                        <Button
-                          fullWidth={mobile < 600 ? true : false}
-                          variant="contained"
-                          color="primary"
-                          sx={{
-                            p: { xs: "8px 64px 8px 64px", md: "15px 160px 15px 160px" },
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 1,
-                          }}
-                          onClick={() => handleNext()}
-                        >
-                          <Typography>{t("bookingDialog.confirm")}</Typography>
-                          {locale === "en" ? <ArrowForward /> : <ArrowBack />}
-                        </Button>
-                      ) : (
-                        <Button
-                          fullWidth={mobile < 600 ? true : false}
-                          variant="contained"
-                          color="primary"
-                          sx={{
-                            p: { xs: "8px 64px 8px 64px", md: "15px 160px 15px 160px" },
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 1,
-                          }}
-                          onClick={() => {
-                            if (numberValidation()) {
-                              setNext(true);
-                            }
-                          }}
-                        >
-                          <Typography>{t("bookingDialog.confirm")}</Typography>
-                          {locale === "en" ? <ArrowForward /> : <ArrowBack />}
-                        </Button>
-                      )}
-                    </Box>
-                    {/* <Typography sx={{ textAlign: "center", mt: 2 }}>
-                      تسجيل الدخول باستخدام رقم هاتف آخر ? انقر هنا
-                    </Typography> */}
-                  </Box>
+                  </Formik>
                 </Box>
               </Box>
             )}
@@ -681,57 +859,75 @@ export default function BookingDialog({ open, onClose, locale }: any) {
                       {t("bookingDialog.step3.title")}
                     </Typography>
                   </Box>
-                  <Box
-                    sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}
+                  <Formik
+                    // validationSchema={schema}
+                    enableReinitialize
+                    initialValues={{
+                      from: BOOKINGKIND === 0 ? Object.keys(data)[0] : `${dateType0}T${time.from}`,
+                      doctorId: DOCID,
+                      serviceId: SERVICEID,
+                      patientId: patientId.current,
+                      complaint: "",
+                      otp: "",
+                    }}
+                    onSubmit={async (values, { setSubmitting }) => {
+                      console.log(values);
+                      axios
+                        .post(apiRoutes.website.AddAppointment, values)
+                        .then((res) => {
+                          setActiveStep((prevActiveStep) => prevActiveStep + 1);
+                        })
+                        .catch((err) => toast.error(err.response.data.message))
+                        .finally(() => setSubmitting(false));
+                    }}
                   >
-                    <TextField
-                      type="text"
-                      placeholder={t("bookingDialog.step3.placeholder")}
-                      // value={name}
-                      // onChange={(e) => setName(e.target.value)}
-                      sx={{ width: { xs: "100%", md: "70%" } }}
-                    />
-                    <Button
-                      fullWidth={mobile < 600 ? true : false}
-                      variant="contained"
-                      color="primary"
-                      sx={{
-                        p: { xs: "8px 64px 8px 64px", md: "15px 160px 15px 160px" },
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1,
-                      }}
-                      onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)}
-                    >
-                      <Typography>{t("bookingDialog.step3.confirm")}</Typography>
-                      {locale === "en" ? <ArrowForward /> : <ArrowBack />}
-                    </Button>
-                  </Box>
+                    {({ handleSubmit, values, isSubmitting }) => (
+                      <Form onSubmit={handleSubmit}>
+                        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+                          <Box sx={{ width: "70%" }}>
+                            <InputField
+                              name="otp"
+                              label={t("bookingDialog.step2.mobile")}
+                              placeholder={t("bookingDialog.step3.placeholder")}
+                            />
+                          </Box>
+                          <LoadingButton
+                            loading={isSubmitting}
+                            fullWidth={mobile < 600 ? true : false}
+                            variant="contained"
+                            color="primary"
+                            sx={{
+                              p: { xs: "8px 64px 8px 64px", md: "15px 160px 15px 160px" },
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                            }}
+                            type="submit"
+                            // onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)}
+                          >
+                            <Typography>{t("bookingDialog.step3.confirm")}</Typography>
+                            {locale === "en" ? <ArrowForward /> : <ArrowBack />}
+                          </LoadingButton>
+                        </Box>
+                      </Form>
+                    )}
+                  </Formik>
                 </Box>
               </Box>
             )}
-            {/* <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-              <Button
-                color="inherit"
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                sx={{ mr: 1 }}
-              >
-                Back
-              </Button>
-              <Box sx={{ flex: "1 1 auto" }} />
-              {isStepOptional(activeStep) && (
-                <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                  Skip
-                </Button>
-              )}
-              <Button onClick={handleNext}>
-                {activeStep === steps.length - 1 ? "Finish" : "Next"}
-              </Button>
-            </Box> */}
           </React.Fragment>
         )}
       </Box>
     </Dialog>
   );
+}
+const schema = Yup.object().shape({
+  phoneNumber: Yup.string().required("رقم الوبايل مطلوب"),
+  name: Yup.string().required("الاسم مطلوب"),
+  birthdate: Yup.string().required("تاريخ الميلاد مطلوب"),
+});
+interface BookingDialogProps {
+  open: { open: boolean; doctorId: string; bookingKind: number; serviceId: string };
+  onClose: any;
+  locale: any;
 }

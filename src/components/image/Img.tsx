@@ -1,4 +1,3 @@
-// import { getPlaceholderImage } from "@/utils/images";
 import { BRANCH1 } from "@/src/assets";
 import { Box } from "@mui/material";
 import Image from "next/image";
@@ -12,16 +11,31 @@ export default function Img({ imageData, width, height }: ImgProps) {
   }
 
   return (
-    <Box sx={{ "&:hover img": { scale: "1.02" }, "& img": { transition: "0.3s ease-out", borderRadius: 2 } }}>
+    <Box
+      sx={{
+        "&:hover img": { scale: "1.02" },
+        "& img": {
+          transition: "0.3s ease-out",
+          borderRadius: 2,
+          width: "100%",
+          maxWidth: "100%",
+          position: "relative",
+        },
+      }}
+    >
       <Image
         placeholder={"blur"}
         blurDataURL={placeholderImg}
         loading="lazy"
         src={src}
         alt={imageData}
-        objectFit="cover"
-        width={width}
-        height={height}
+        // objectFit="cover"
+        // width={width}
+        // height={height}
+        width={0}
+        height={0}
+        sizes="100vw"
+        style={{ width: "100%", height: "auto" }} // optional
       />
     </Box>
   );

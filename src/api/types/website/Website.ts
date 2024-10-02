@@ -2,15 +2,18 @@ import { MainType } from "../MainType";
 
 export interface MedicalCenterInfo extends MainType {
   data: {
-    id: string;
-    name: string;
-    nameEn: number;
-    siteName: number;
-    siteNameEn: string;
-    description: string;
-    descriptionEn: string;
-    websiteUrl: string;
-    image: string;
+    clinicId: string;
+    clinicName: string;
+    clinicNameEn: string;
+    clinicDescription: string;
+    clinicDescriptionEn: string;
+    clinicMapUrl: string;
+    clinicAddress: string;
+    clinicAddressEn: string;
+    clinicImage: string;
+    activeTimeType: number;
+    bookingType: number;
+    openAt: string;
   };
 }
 export interface AllSpecialty extends MainType {
@@ -21,45 +24,57 @@ export interface AllSpecialty extends MainType {
     page: number;
   };
 }
+export interface Doctor extends MainType {
+  data: {
+    id: string;
+    name: string;
+    simpleDescription: string;
+    simpleDescriptionEn: string;
+    description: string;
+    descriptionEn: string;
+    phoneNumber: string;
+    internalCode: string;
+    docCode: string | null;
+    birthdate: string;
+    bookingKind: number;
+    maximumBookingNumber: number;
+    sessionTimeInMinutes: number;
+    cost: number;
+    needConfirmBooking: boolean;
+    isAutoConfirmBooking: boolean;
+    isOwner: boolean;
+    image: string;
+  };
+  totalCount: number;
+  pageSize: number;
+  page: number;
+}
 export interface AllDoctor extends MainType {
   data: {
     results: Array<{
-      doctorId: string;
-      doctorName: string;
-      doctorNameEn: string;
-      doctorDescription: string;
-      doctorDescriptionEn: string;
-      doctorBio: string;
-      doctorBioEn: string;
-      doctorPhoneNumber: string;
-      doctorImage: string;
-      doctorSpecialty: Specialty;
+      id: string;
+      name: string;
+      simpleDescription: string;
+      simpleDescriptionEn: string;
+      description: string;
+      descriptionEn: string;
+      phoneNumber: string;
+      internalCode: string;
+      docCode: string | null;
+      birthdate: string;
+      bookingKind: number;
+      maximumBookingNumber: number;
+      sessionTimeInMinutes: number;
+      cost: number;
+      needConfirmBooking: boolean;
+      isAutoConfirmBooking: boolean;
+      isOwner: boolean;
+      image: string;
     }>;
     totalCount: number;
     pageSize: number;
     page: number;
   };
-}
-export interface Doctor extends MainType {
-  data: {
-    clinic: Clinic;
-    doctorBirthdate: string;
-    doctorConsultationDuration: number;
-    workingDays: Array<WorkingDay>;
-    doctorId: string;
-    doctorName: string;
-    doctorNameEn: string;
-    doctorDescription: string;
-    doctorDescriptionEn: string;
-    doctorBio: string;
-    doctorBioEn: string;
-    doctorPhoneNumber: string;
-    doctorImage: string;
-    doctorSpecialty: Specialty;
-  };
-  totalCount: number;
-  pageSize: number;
-  page: number;
 }
 export interface AllClinic extends MainType {
   data: {

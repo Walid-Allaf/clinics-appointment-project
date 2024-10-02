@@ -1,7 +1,17 @@
 interface Specialty {
-  specialtyId: string;
-  specialtyName: string;
-  specialtyNameEn: string;
+  id: string;
+  name: string;
+  nameEn: string;
+  description: string;
+  descriptionEn: string;
+  internalCode: string;
+  docCode: string;
+  needDoctor: boolean;
+  cost: number;
+  sessionTimeInMinutes: number;
+  groupId: string;
+  groupName: string;
+  groupNameEn: string;
 }
 interface WorkingDay {
   workDayId: string;

@@ -2,15 +2,18 @@
 import React from "react";
 import { RANDOMDOCTOR, SPECIALTYIMAGE1, TEAMMEMBER1 } from "@/src/assets";
 import { BookingDialog, Loading, TeamMemberCard, Title } from "@/src/components";
-import { Container, Grid, Box } from "@mui/material";
+import { Container, Grid, Box, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { apiRoutes, axios } from "@/src/api";
 import { AxiosResponse } from "axios";
 import { AllDoctor } from "@/src/api/types";
+import { useSearchParams } from "next/navigation";
 
-export default function Doctors({ locale, next }: any) {
+export default function Doctors({ locale, next, serviceId }: any) {
   const { t } = useTranslation();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState({ open: false, doctorId: "", bookingKind: 0, serviceId: "" });
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
 
   const [loading, setLoading] = React.useState<boolean>(false);
   const [doctors, setDoctors] = React.useState<AllDoctor>();
@@ -18,10 +21,14 @@ export default function Doctors({ locale, next }: any) {
   const getDoctors = () => {
     setLoading(true);
     axios
-      .get(apiRoutes.website.GetAllDoctor)
+      .get(apiRoutes.website.GetAllDoctor(params.get("serviceId") || serviceId || ""))
       .then((response: AxiosResponse<AllDoctor, any>) => {
         setDoctors(response.data);
+        console.log(response.data);
         setLoading(false);
+        if (doctors?.data.results.length === 1) {
+          next(doctors?.data.results[0].id);
+        }
       })
       .catch((error) => {
         console.error(error.message);
@@ -41,40 +48,58 @@ export default function Doctors({ locale, next }: any) {
           <Loading />
         ) : (
           <Grid container spacing={2} maxWidth="100%">
-            <Grid item xs={12} sm={6} md={4} lg={3}>
+            {/* <Grid item xs={12} sm={6} md={4} lg={3}>
               <Box onClick={() => setOpen(true)} sx={{ cursor: "pointer" }}>
                 <TeamMemberCard
                   name={t("doctorsPage.randomDoctorName")}
                   description={t("doctorsPage.randomDescription")}
                   specialty={t("doctorsPage.specialty")}
                   specialtyImg={SPECIALTYIMAGE1}
-                  teamMemberImg={RANDOMDOCTOR}
+                  teamMemberImg={TEAMMEMBER1}
                   locale={locale}
                   next={next}
                 />
               </Box>
-            </Grid>
+            </Grid> */}
 
-            {doctors?.data.results.map((item) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={item.doctorId}>
-                <Box onClick={() => setOpen(true)} sx={{ cursor: "pointer" }}>
-                  <TeamMemberCard
-                    name={locale === "ar" ? item.doctorName : item.doctorNameEn}
-                    description={locale === "ar" ? item.doctorDescription : item.doctorDescriptionEn}
-                    specialty={locale === "ar" ? item.doctorSpecialty.specialtyName : item.doctorSpecialty.specialtyNameEn}
-                    specialtyImg={SPECIALTYIMAGE1}
-                    teamMemberImg={item.doctorImage}
-                    locale={locale}
-                    next={() => next(item.doctorId)}
-                  />
-                </Box>
-              </Grid>
-            ))}
+            {doctors && doctors?.data.results.length > 0 ? (
+              doctors?.data.results.map((item) => (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
+                  <Box
+                    onClick={() =>
+                      setOpen({
+                        open: true,
+                        doctorId: item.id,
+                        bookingKind: item.bookingKind,
+                        serviceId: params.get("serviceId") || serviceId || "",
+                      })
+                    }
+                    sx={{ cursor: "pointer" }}
+                  >
+                    <TeamMemberCard
+                      name={item.name || ""}
+                      description={locale === "ar" ? item.description : item.descriptionEn}
+                      specialty={locale === "ar" ? item.name : item.name}
+                      specialtyImg={SPECIALTYIMAGE1}
+                      teamMemberImg={item.image}
+                      locale={locale}
+                      next={() => next(item.id)}
+                    />
+                  </Box>
+                </Grid>
+              ))
+            ) : (
+              <Box sx={{ minHeight: 500, display: "grid", placeItems: "center", width: "100%" }}>
+                <Typography>{t("doctorsPage.noDoctors")}</Typography>
+              </Box>
+            )}
           </Grid>
         )}
       </Box>
 
-      <BookingDialog open={open} onClose={() => setOpen(false)} locale={locale} />
+      {open.open && (
+        <BookingDialog open={open} onClose={() => setOpen({ open: false, doctorId: "", bookingKind: 0, serviceId: "" })} locale={locale} />
+      )}
     </Container>
   );
 }

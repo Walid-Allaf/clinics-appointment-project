@@ -26,15 +26,15 @@ export default function MedicalTeamSlider({ locale, data }: MedicalTeamSliderPro
           breakpoints={{ 0: { slidesPerView: 1 }, 768: { slidesPerView: 2 }, 992: { slidesPerView: 3 }, 1440: { slidesPerView: 4 } }}
         >
           {data.data.results.map((member, index) => {
-            const { doctorName, doctorNameEn, doctorDescription, doctorDescriptionEn, doctorImage, doctorSpecialty, doctorId } = member;
+            const { id, name, description, descriptionEn, image } = member;
             return (
-              <SwiperSlide key={doctorId}>
+              <SwiperSlide key={id}>
                 <TeamMemberCard
-                  name={locale === "ar" ? doctorName : doctorNameEn}
-                  description={locale === "ar" ? doctorDescription : doctorDescriptionEn}
-                  specialty={locale === "ar" ? doctorSpecialty.specialtyName : doctorSpecialty.specialtyNameEn}
+                  name={locale === "ar" ? name : name}
+                  description={locale === "ar" ? description : descriptionEn}
+                  specialty={locale === "ar" ? description : descriptionEn}
                   specialtyImg={SPECIALTYIMAGE1}
-                  teamMemberImg={doctorImage}
+                  teamMemberImg={image}
                   locale={locale}
                 />
               </SwiperSlide>
@@ -48,15 +48,15 @@ export default function MedicalTeamSlider({ locale, data }: MedicalTeamSliderPro
       <Grid container spacing={2} sx={{ "& div": { height: "auto" } }}>
         {data.data.results.length > 0 && data.data.results.length <= 4 ? (
           data.data.results.map((member, index) => {
-            const { doctorName, doctorNameEn, doctorDescription, doctorDescriptionEn, doctorImage, doctorSpecialty, doctorId } = member;
+            const { name, description, descriptionEn, image, id } = member;
             return (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={doctorId}>
+              <Grid item xs={12} sm={6} md={4} lg={3} key={id}>
                 <TeamMemberCard
-                  name={locale === "ar" ? doctorName : doctorNameEn}
-                  description={locale === "ar" ? doctorDescription : doctorDescriptionEn}
-                  specialty={locale === "ar" ? doctorSpecialty.specialtyName : doctorSpecialty.specialtyNameEn}
+                  name={locale === "ar" ? name : name}
+                  description={locale === "ar" ? description : descriptionEn}
+                  specialty={locale === "ar" ? description : descriptionEn}
                   specialtyImg={SPECIALTYIMAGE1}
-                  teamMemberImg={doctorImage}
+                  teamMemberImg={image}
                   locale={locale}
                 />
               </Grid>

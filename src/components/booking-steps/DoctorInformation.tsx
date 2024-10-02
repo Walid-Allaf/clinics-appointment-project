@@ -4,19 +4,22 @@ import { Doctor } from "@/src/api/types";
 import { BookingDialog, Img, Loading } from "@/src/components";
 import { Container, Box, Typography, Card, CardContent, Button } from "@mui/material";
 import { AxiosResponse } from "axios";
+import { useSearchParams } from "next/navigation";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-const DoctorInformation = ({ locale, doctorId }: any) => {
-  const [open, setOpen] = React.useState(false);
+const DoctorInformation = ({ locale, doctorId, serviceId }: any) => {
+  const [open, setOpen] = React.useState({ open: false, doctorId: "", bookingKind: 0, serviceId: "" });
   const [loading, setLoading] = React.useState<boolean>(false);
   const [doctorDetails, setDoctorDetails] = React.useState<Doctor>();
   const { t } = useTranslation();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
 
   const getDoctorDetails = () => {
     setLoading(true);
     axios
-      .get(apiRoutes.website.GetDoctor(doctorId))
+      .get(apiRoutes.website.GetDoctor(doctorId || params.get("doctorId") || ""))
       .then((response: AxiosResponse<Doctor, any>) => {
         setDoctorDetails(response.data);
         setLoading(false);
@@ -29,6 +32,7 @@ const DoctorInformation = ({ locale, doctorId }: any) => {
 
   React.useEffect(() => {
     getDoctorDetails();
+    console.log("doctorId", doctorId);
   }, []);
   return (
     <Box>
@@ -43,10 +47,10 @@ const DoctorInformation = ({ locale, doctorId }: any) => {
                   {t("doctorDetailes.aboutUs")}
                 </Typography>
                 <Typography variant="h4" sx={{ fontSize: "48px", fontWeight: 500, lineHeight: "60px" }} gutterBottom>
-                  {locale === "ar" ? doctorDetails?.data.doctorName : doctorDetails?.data.doctorNameEn}
+                  {locale === "ar" ? doctorDetails?.data.name : doctorDetails?.data.name}
                 </Typography>
                 <Typography variant="subtitle1" sx={{ fontSize: "16px", fontWeight: 500, lineHeight: "24px", minHeight: 70 }} gutterBottom>
-                  {locale === "ar" ? doctorDetails?.data.doctorBio : doctorDetails?.data.doctorBioEn}
+                  {locale === "ar" ? doctorDetails?.data.simpleDescription : doctorDetails?.data.simpleDescriptionEn}
                 </Typography>
               </Box>
             </Container>
@@ -66,7 +70,10 @@ const DoctorInformation = ({ locale, doctorId }: any) => {
                 </Typography>
                 <Box sx={{ fontSize: "18px", fontWeight: 400, lineHeight: "21.78px" }}>
                   <Typography variant="body1" paragraph>
-                    {locale === "ar" ? doctorDetails?.data.doctorBio : doctorDetails?.data.doctorBioEn}
+                    {locale === "ar" ? doctorDetails?.data.simpleDescription : doctorDetails?.data.simpleDescriptionEn}
+                  </Typography>
+                  <Typography variant="body1" paragraph>
+                    {locale === "ar" ? doctorDetails?.data.description : doctorDetails?.data.descriptionEn}
                   </Typography>
                   {/* <Typography variant="body1" paragraph>
                     Throughout his over 15-year career, Dr. Stevens has worked in several prestigious hospitals, including [Hospital Name]
@@ -111,10 +118,10 @@ const DoctorInformation = ({ locale, doctorId }: any) => {
                           zIndex: 1,
                           overflow: "hidden",
                         },
-                        "& img": { width: "100%", height: "auto", position: "relative", bottom: "-5px", zIndex: 2, aspectRatio: "1 / 1.2" },
+                        "& img": { width: "100%", height: "auto", position: "relative", bottom: "-5px", zIndex: 2 },
                       }}
                     >
-                      <Img imageData={doctorDetails?.data.doctorImage ?? ""} width={340} height={250} />
+                      <Img imageData={doctorDetails?.data.image ?? ""} width={340} height={250} />
                     </Box>
                   </Box>
                   <CardContent
@@ -134,27 +141,27 @@ const DoctorInformation = ({ locale, doctorId }: any) => {
                     <Typography variant="body2">
                       <span>{t("doctorDetailes.speciality")}:</span>
                       <span>
-                        {locale === "ar"
+                        {/* {locale === "ar"
                           ? doctorDetails?.data.doctorSpecialty.specialtyName
-                          : doctorDetails?.data.doctorSpecialty.specialtyNameEn}
+                          : doctorDetails?.data.doctorSpecialty.specialtyNameEn} */}
                       </span>
                     </Typography>
                     <Typography variant="body2">
                       <span>{t("doctorDetailes.department")}:</span>
-                      <span>{locale === "ar" ? doctorDetails?.data.clinic.clinicName : doctorDetails?.data.clinic.clinicNameEn}</span>
+                      {/* <span>{locale === "ar" ? doctorDetails?.data.clinic.clinicName : doctorDetails?.data.clinic.clinicNameEn}</span> */}
                     </Typography>
                     <Typography variant="body2">
                       <span>{t("doctorDetailes.branch")}:</span>
                       <span>
-                        {locale === "ar"
+                        {/* {locale === "ar"
                           ? doctorDetails?.data.clinic.clinicCity.cityName
-                          : doctorDetails?.data.clinic.clinicCity.cityNameEn}
+                          : doctorDetails?.data.clinic.clinicCity.cityNameEn} */}
                       </span>
                     </Typography>
                     <Typography variant="body2">
                       <span>{t("doctorDetailes.consultationDuration")}:</span>{" "}
                       <span>
-                        {doctorDetails?.data.doctorConsultationDuration}
+                        {doctorDetails?.data.sessionTimeInMinutes}
                         {t("doctorDetailes.consultationDurationUnit")}
                       </span>
                     </Typography>
@@ -164,21 +171,33 @@ const DoctorInformation = ({ locale, doctorId }: any) => {
                     <Typography variant="body2">
                       <span>{t("doctorDetailes.workingDays")}:</span>
                       <Box component={"span"} sx={{ display: "flex", flexDirection: "column" }}>
-                        {doctorDetails?.data.workingDays.map((day) => (
+                        {/* {doctorDetails?.data.workingDays.map((day) => (
                           <span key={day.workDayId}>{locale === "ar" ? day.workDayName : day.workDayNameEn}</span>
-                        ))}
+                        ))} */}
                       </Box>
                     </Typography>
                     <Typography variant="body2">
                       <span>{t("doctorDetailes.workingHours")}:</span>
                       <Box component={"span"} sx={{ display: "flex", flexDirection: "column" }}>
-                        {doctorDetails?.data.workingDays.map((day) => (
+                        {/* {doctorDetails?.data.workingDays.map((day) => (
                           <span key={day.workDayId}>{`${day.from.slice(11, 16)}-${day.to.slice(11, 16)}`}</span>
-                        ))}
+                        ))} */}
                       </Box>
                     </Typography>
                     <Box sx={{ mt: 4 }}>
-                      <Button fullWidth onClick={() => setOpen(true)} variant="contained" color="secondary">
+                      <Button
+                        fullWidth
+                        onClick={() =>
+                          setOpen({
+                            open: true,
+                            doctorId: doctorDetails?.data.id || "",
+                            bookingKind: doctorDetails?.data.bookingKind || 0,
+                            serviceId: serviceId || params.get("serviceId") || "",
+                          })
+                        }
+                        variant="contained"
+                        color="secondary"
+                      >
                         {t("doctorDetailes.bookAppointment")}
                       </Button>
                     </Box>
@@ -189,7 +208,9 @@ const DoctorInformation = ({ locale, doctorId }: any) => {
           </Container>
         </>
       )}
-      <BookingDialog open={open} onClose={() => setOpen(false)} locale={locale} />
+      {open.open && (
+        <BookingDialog open={open} onClose={() => setOpen({ open: false, doctorId: "", bookingKind: 0, serviceId: "" })} locale={locale} />
+      )}
     </Box>
   );
 };

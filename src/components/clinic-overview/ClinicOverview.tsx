@@ -14,6 +14,7 @@ export default async function ClinicOverview({ locale }: any) {
         justifyContent: "center",
         backgroundColor: "#004B71",
         py: { xs: 4, md: 0, lg: 5 },
+        mt: 10,
         color: "white",
         position: "relative",
       }}

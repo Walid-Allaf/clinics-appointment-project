@@ -4,8 +4,9 @@ import { Locations, QuickLinks } from "@/src/constants";
 import LanguageChanger from "../common/LanguageChanger";
 import initTranslations from "@/src/app/i18n";
 import { Logo } from "..";
+import { MedicalCenterInfo } from "@/src/api/types";
 
-export default async function Footer({ locale }: any) {
+export default async function Footer({ locale, data }: FooterProps) {
   const { t } = await initTranslations(locale, ["footer"]);
 
   return (
@@ -29,7 +30,7 @@ export default async function Footer({ locale }: any) {
         >
           <Grid item xs={12} md={4}>
             <Box sx={{ display: "flex", justifyContent: { xs: "center", sm: "flex-start" } }}>
-              <Logo locale={locale} />
+              <Logo locale={locale} logo={data.data.clinicImage} name={data.data.clinicName} nameEn={data.data.clinicNameEn} />
             </Box>
 
             <Typography variant="body2" sx={{ fontSize: "24px", lineHeight: "38px" }}>
@@ -115,4 +116,9 @@ export default async function Footer({ locale }: any) {
       </Container>
     </Box>
   );
+}
+
+interface FooterProps {
+  locale: any;
+  data: MedicalCenterInfo;
 }

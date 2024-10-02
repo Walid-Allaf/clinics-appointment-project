@@ -32,16 +32,18 @@
     "step1.night": "Evening",
     "step1.book": "Appointment booked on",
     "confirm": "confirm",
+    "continue": "continue",
     "step2": "Patient Information",
     "step2.title": "Your personal data is",
     "step2.mobile": "Phone Number",
     "step2.firstname": "First Name",
     "step2.lastname": "Last Name",
     "step2.gender": "Gender",
+    "step2.address": "Address",
     "step2.birthdate": "Date of birth",
     "step2.howYouKnowUs": "How did you learn about our clinic ?",
     "step3": "Verification Code",
-    "step3.title": "Please enter the code that was sent to you via WhatsApp",
+    "step3.title": "Please enter the code that was sent to you",
     "step3.placeholder": "Enter the code here",
     "step3.confirm": "Confirm Code",
     "step4.title": "Thank you for scheduling your appointment. We are pleased to confirm it.",
@@ -57,7 +59,7 @@
     "title": "Choose Your Location"
   },
   "specialityPage": {
-    "title": "Specialties",
+    "title": "Services",
     "Cardiology": "Cardiology",
     "Ophthalmology": "Ophthalmology",
     "Pediatric": "Pediatric",
@@ -82,7 +84,8 @@
     "description": "With over 15 years of experience, [Doctor's Name] is based at [Clinic Name] in [City]. Specializing in advanced cardiac care and diagnostics, [he/she] is fluent in both English and Arabic.",
     "specialty": "Medical specialty",
     "randomDoctorName": "Random Doctor Name",
-    "randomDescription": "With over 15 years of experience, [Doctor's Name] is based at [Clinic Name] in [City]. Specializing in advanced cardiac care and diagnostics, [he/she] is fluent in both English and Arabic."
+    "randomDescription": "With over 15 years of experience, [Doctor's Name] is based at [Clinic Name] in [City]. Specializing in advanced cardiac care and diagnostics, [he/she] is fluent in both English and Arabic.",
+    "noDoctors": "No doctors"
   },
   "doctorDetailes": {
     "aboutUs": "About Us",

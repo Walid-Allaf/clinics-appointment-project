@@ -1,8 +1,8 @@
 export const QuickLinks = [
   { text: "Home", path: "/" },
-  { text: "Clinics", path: "/clinics" },
-  { text: "Specialties", path: "/specialties" },
-  { text: "DoctorsInfo", path: "/doctors" },
+  { text: "Clinics", path: "#" },
+  { text: "Specialties", path: "#" },
+  { text: "DoctorsInfo", path: "#" },
   { text: "Locations", path: "#" },
   { text: "About Us", path: "#" },
 ];

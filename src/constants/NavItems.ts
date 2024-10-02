@@ -4,8 +4,8 @@ export const NavItems = [
   // { text: "specialties", path: "/specialties" },
   // { text: "doctorsInformation", path: "/doctors" },
   // { text: "aboutUs", path: "/about-us" },
-  { text: "clinics", path: "/booking-an-appointment", step: "0" },
-  { text: "specialties", path: "/booking-an-appointment", step: "1" },
-  { text: "doctorsInformation", path: "/booking-an-appointment", step: "2" },
+  // { text: "clinics", path: "/booking-an-appointment", step: "0" },
+  { text: "specialties", path: "/booking-an-appointment", step: "0" },
+  { text: "doctorsInformation", path: "/booking-an-appointment", step: "1" },
   { text: "aboutUs", path: "/about-us", step: null },
 ];

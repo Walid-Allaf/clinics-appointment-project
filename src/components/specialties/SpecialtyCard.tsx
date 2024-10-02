@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 
 export default function SpecialtyCard(props: { item: Specialty; locale: any }) {
   const {
-    item: { specialtyId, specialtyName, specialtyNameEn },
+    item: { id, name, nameEn },
     locale,
   } = props;
   const { t } = useTranslation();
@@ -16,7 +16,7 @@ export default function SpecialtyCard(props: { item: Specialty; locale: any }) {
     <Box
       component={Link}
       href={"#"}
-      key={specialtyId}
+      key={id}
       sx={{
         width: { xs: "169px", md: "253px" },
         height: { xs: "169px", md: "239px" },
@@ -67,7 +67,7 @@ export default function SpecialtyCard(props: { item: Specialty; locale: any }) {
               color: "#fff",
             }}
           >
-            {locale === "ar" ? specialtyName : specialtyNameEn}
+            {locale === "ar" ? name : nameEn}
           </Typography>
         </Box>
       </Box>

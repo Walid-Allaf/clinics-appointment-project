@@ -7,7 +7,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export default function TeamMemberCard(props: any) {
-  const { name, description, specialty, specialtyImg, teamMemberImg, locale, next } = props;
+  const { id, name, description, specialty, specialtyImg, teamMemberImg, locale, next } = props;
   const { t } = useTranslation();
 
   return (
@@ -20,35 +20,36 @@ export default function TeamMemberCard(props: any) {
         background: "linear-gradient(180deg, #F1F1F1 -26.98%, #004B71 100%)",
         minHeight: 500,
         height: "100%",
+        overflow: "hidden",
       }}
     >
       <Box
         sx={{
           overflow: "hidden",
-          "&:before": {
-            content: '""',
-            position: "absolute",
-            top: -1,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "102%",
-            height: "50px",
-            background: "#ffffff",
-            zIndex: 1,
-          },
+          // "&:before": {
+          //   content: '""',
+          //   position: "absolute",
+          //   top: -1,
+          //   left: "50%",
+          //   transform: "translateX(-50%)",
+          //   width: "102%",
+          //   height: "50px",
+          //   background: "#ffffff",
+          //   zIndex: 1,
+          // },
         }}
       >
         <Box
           sx={{
-            "& img": { width: "100%", height: "auto", position: "relative", bottom: "-5px", zIndex: 2, aspectRatio: "1 / 1.2" },
+            "& img": { /*width: "100%", height: "auto",*/ position: "relative", bottom: "-5px", zIndex: 2 /*aspectRatio: "1 / 1.2"*/ },
             px: 2,
           }}
         >
-          {typeof teamMemberImg === "string" ? (
-            <Img imageData={teamMemberImg} width={0} height={0} />
+          {/* {typeof teamMemberImg === "string" ? (
           ) : (
             <Image src={teamMemberImg} alt="team-member-img" />
-          )}
+          )} */}
+          <Img imageData={teamMemberImg} width={0} height={0} />
         </Box>
       </Box>
       <Box
@@ -104,7 +105,7 @@ export default function TeamMemberCard(props: any) {
             <Button
               variant="contained"
               color="secondary"
-              onClick={next}
+              onClick={() => next(id)}
               sx={{
                 color: "#004B71",
                 // width: "auto",

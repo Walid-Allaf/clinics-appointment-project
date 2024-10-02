@@ -5,10 +5,15 @@ import { SpecialLink } from "..";
 import { useTranslation } from "react-i18next";
 import React from "react";
 import { MedicalCenterInfo } from "@/src/api/types";
+import { HEROIMAGE } from "@/src/assets";
+import Cookies from "js-cookie";
 
 export default function Welcome({ locale, data }: WelcomeProps) {
   const { t } = useTranslation();
   const Features = ["feature1", "feature2", "feature3"];
+
+  console.log("data", data);
+  Cookies.set("bookikngType", data.data.bookingType.toString());
 
   return (
     <Grid container alignItems="center" justifyContent="space-between">
@@ -19,13 +24,13 @@ export default function Welcome({ locale, data }: WelcomeProps) {
         >
           <Typography sx={{ fontSize: "20px", fontWeight: 500, lineHeight: "25px" }}>
             {t("landing.welcome")}
-            {locale === "ar" ? data?.data.siteName : data?.data.siteNameEn}
+            {locale === "ar" ? data?.data.clinicName : data.data.clinicNameEn}
           </Typography>
           <Typography sx={{ fontSize: { xs: "28px", md: "32px", lg: "36px" }, fontWeight: 600, lineHeight: { xs: "38px", md: "45px" } }}>
-            {locale === "ar" ? data?.data.name : data?.data.nameEn}
+            {locale === "ar" ? data?.data.clinicName : data?.data.clinicNameEn}
           </Typography>
           <Typography sx={{ fontWeight: 500, lineHeight: "19.36px" }}>
-            {locale === "ar" ? data?.data.description : data?.data.descriptionEn}
+            {locale === "ar" ? data?.data.clinicDescription : data?.data.clinicDescriptionEn}
           </Typography>
           <Box>
             {/* <List sx={{}}>
@@ -70,13 +75,14 @@ export default function Welcome({ locale, data }: WelcomeProps) {
           textAlign: { xs: "center", md: "right" },
         }}
       >
-        <Image
+        <Image src={HEROIMAGE} alt="Doctor" style={{ maxWidth: "100%", height: "auto" }} />
+        {/* <Image
           src={`data:image/png;base64,${data?.data.image}`}
           alt="Doctor"
           style={{ maxWidth: "100%", height: "auto" }}
           width={500}
           height={500}
-        />
+        /> */}
       </Grid>
     </Grid>
   );
