@@ -24,6 +24,9 @@ const MedicalCenterWebAPIs = {
       prefix + `/CheckPatient?name=${name}&phoneNumber=${phoneNumber}&birthdate=${birthdate}`,
 
     AddAppointment: prefix + "/AddAppointment",
+
+    GetAvailableAppointmentTimesForService: (serviceId: string) =>
+      prefix + `/GetAvailableAppointmentTimesForService?serviceId=${serviceId}`,
   },
 };
 export default MedicalCenterWebAPIs;

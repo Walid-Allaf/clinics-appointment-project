@@ -10,15 +10,15 @@ import { useTranslation } from "react-i18next";
 
 const DoctorInformation = ({ locale, doctorId, serviceId }: any) => {
   const [open, setOpen] = React.useState({ open: false, doctorId: "", bookingKind: 0, serviceId: "" });
-  const [loading, setLoading] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(true);
   const [doctorDetails, setDoctorDetails] = React.useState<Doctor>();
   const { t } = useTranslation();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams);
 
-  const getDoctorDetails = () => {
+  const getDoctorDetails = async () => {
     setLoading(true);
-    axios
+    await axios
       .get(apiRoutes.website.GetDoctor(doctorId || params.get("doctorId") || ""))
       .then((response: AxiosResponse<Doctor, any>) => {
         setDoctorDetails(response.data);

@@ -11,7 +11,6 @@ import {
   FormControlLabel,
   RadioGroup,
   Radio,
-  TextField,
   FormLabel,
   Select,
   MenuItem,
@@ -27,9 +26,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useTranslation } from "react-i18next";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
-import { Contact, DaysOfWeek } from "@/src/constants";
-import ImageIcon from "@mui/icons-material/Image";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useRouter } from "next/navigation";
 import { PatientInfo } from "@/src/types";
 import CounterDown from "./CounterDown";
@@ -56,28 +52,12 @@ export default function BookingDialog({ open, onClose, locale }: BookingDialogPr
   const SERVICEID = open.serviceId;
 
   const patientId = React.useRef<string | null>(null);
-  const otp = React.useRef<string | null>(null);
 
   const handleChange = (event: any, newValue: any) => {
     setTabValue(newValue);
   };
 
   const steps = [t("bookingDialog.step1"), t("bookingDialog.step2"), t("bookingDialog.step3")];
-  const dates1 = [
-    { name: "9:30", id: "1" },
-    { name: "9:30", id: "2" },
-    { name: "9:30", id: "3" },
-  ];
-  const dates2 = [
-    { name: "9:30", id: "4" },
-    { name: "9:30", id: "5" },
-    { name: "9:30", id: "6" },
-  ];
-  const dates3 = [
-    { name: "9:30", id: "7" },
-    { name: "9:30", id: "8" },
-    { name: "9:30", id: "9" },
-  ];
 
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
@@ -85,75 +65,13 @@ export default function BookingDialog({ open, onClose, locale }: BookingDialogPr
 
   const [dateType0, setDateType0] = React.useState<string>("");
   const [dateType1, setDateType1] = React.useState<string>("");
-  const [time, setTime] = React.useState<{ from: string; to: string }>({ from: "", to: "" });
+  const [time, setTime] = React.useState<{ from: string; to: string; roomId?: string }>({ from: "", to: "", roomId: "" });
 
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any>({});
 
   const [next, setNext] = useState(true);
-  const [number, setNumber] = useState("");
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [birthdate, setBirthdate] = useState(dayjs());
-  const [errors, setErrors] = useState<PatientInfo>({
-    number: "",
-    firstname: "",
-    lastname: "",
-    birthdate: "",
-  });
   const [isFormValid, setIsFormValid] = useState(false);
-
-  const numberValidation = () => {
-    let errors: PatientInfo = {
-      number: "",
-      firstname: "",
-      lastname: "",
-      birthdate: "",
-    };
-
-    if (number === "") {
-      errors.number = t("validation.numberRequired");
-    } else if (!/^\d+$/.test(number.toString())) {
-      errors.number = t("validation.numberInvalid");
-    } else if (number.length !== 10) {
-      errors.number = t("validation.numberInvalid");
-    }
-
-    setErrors(errors);
-    return Object.values(errors).filter((err) => err !== "").length === 0;
-  };
-  const validateForm = () => {
-    console.log("validation");
-    let errors: PatientInfo = {
-      number: "",
-      firstname: "",
-      lastname: "",
-      birthdate: "",
-    };
-
-    if (number === "") {
-      errors.number = t("validation.numberRequired");
-    } else if (!/^\d+$/.test(number.toString())) {
-      errors.number = t("validation.numberInvalid");
-    } else if (number.length !== 10) {
-      errors.number = t("validation.numberInvalid");
-    }
-
-    if (firstname === "") {
-      errors.firstname = t("validation.firstnameRequired");
-    }
-
-    if (!lastname) {
-      errors.lastname = t("validation.lastnameRequired");
-    }
-
-    // if (!birthdate) {
-    //   errors.birthdate = "Password is required.";
-    // }
-
-    setErrors(errors);
-    setIsFormValid(Object.values(errors).filter((err) => err !== "").length === 0);
-  };
 
   const isStepOptional = (step: number) => {
     return step === 1;
@@ -231,13 +149,35 @@ export default function BookingDialog({ open, onClose, locale }: BookingDialogPr
         setLoading(false);
       });
   };
+  const getAvailableAppointmentTimesForService = async () => {
+    setLoading(true);
+    await axios
+      .get(apiRoutes.website.GetAvailableAppointmentTimesForService(SERVICEID))
+      .then((response) => {
+        setData(response.data.data);
+        if (Object.keys(response.data.data)[0]) {
+          setDateType1(Object.keys(response.data.data)[0].slice(0, 10));
+        } else toast.error("لايوجد مواعيد");
+        setLoading(false);
+
+        console.log("response.data.data", response.data.data[Object.keys(response.data.data)[0]].length);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+        setLoading(false);
+      });
+  };
 
   useEffect(() => {
     if (ISOPEN) {
-      if (BOOKINGKIND === 0) {
-        getAvailableAppointmentCount();
+      if (DOCID !== "") {
+        if (BOOKINGKIND === 0) {
+          getAvailableAppointmentCount();
+        } else {
+          getAvailableAppointmentTimes();
+        }
       } else {
-        getAvailableAppointmentTimes();
+        getAvailableAppointmentTimesForService();
       }
       console.log("open", ISOPEN);
     }
@@ -271,12 +211,7 @@ export default function BookingDialog({ open, onClose, locale }: BookingDialogPr
           handleReset();
         }, 500);
         setIsFormValid(false);
-        setFirstname("");
-        setLastname("");
-        setNumber("");
-        setBirthdate(dayjs());
         setNext(true);
-        setErrors({ number: "", firstname: "", lastname: "", birthdate: "" });
       }}
       fullWidth
       maxWidth="md"
@@ -302,7 +237,7 @@ export default function BookingDialog({ open, onClose, locale }: BookingDialogPr
         ) : (
           <></>
         )}
-        <CounterDown expiryTimestamp={new Date().setSeconds(new Date().getSeconds() + 500)} />
+        <CounterDown expiryTimestamp={new Date().setSeconds(new Date().getSeconds() + 300)} />
         {activeStep === steps.length ? (
           <Box sx={{ p: 2 }}>
             <Typography
@@ -451,101 +386,97 @@ export default function BookingDialog({ open, onClose, locale }: BookingDialogPr
                             className="calendar"
                             onChange={(e) => {
                               setDateType0(e!.format("YYYY-MM-DD").toString());
-                              setTime({ from: "", to: "" });
-                              console.log(time);
+                              setTime({ from: "", to: "", roomId: "" });
                             }}
                             mapDays={({ date }) => {
                               let isAvailable = Object.keys(data || {})
                                 .map((el) => el.slice(0, 10))
                                 .includes(date.toDate().toISOString().slice(0, 10));
-                              if (!isAvailable) return { disabled: true, style: { color: "#ccc" }, onClick: () => alert("un available") };
+                              if (!isAvailable) return { disabled: true, style: { color: "#ccc" }, onClick: () => {} };
                             }}
                           />
-                          <>
-                            {BOOKINGKIND === 1 && (
-                              <Box sx={{ p: 2 }}>
-                                <Typography sx={{ py: 1 }}>{t("bookingDialog.step1.morning")}</Typography>
-                                <RadioGroup sx={{ display: "flex", flexDirection: "row", gap: 1, "[dir=ltr] &": { px: 1 } }}>
-                                  {dateType0 &&
-                                    data[Object.keys(data).filter((key) => key.slice(0, 10) === dateType0)[0]]
-                                      .filter((ele: any) => ele.shift === 0)
-                                      .map((el: any, index: number) => (
-                                        <FormControlLabel
-                                          key={index}
-                                          name="time"
-                                          control={<Radio sx={{ display: "none" }} name={el.from.slice(0, 5)} />}
-                                          label={el.from.slice(0, 5)}
-                                          sx={{
-                                            userSelect: "none",
-                                            "& span": {
-                                              fontSize: { xs: "12px", sm: "16px" },
-                                              borderRadius: "100px",
-                                              // color: "#FFF",
-                                              backgroundColor: time.from.slice(0, 5) === el.from.slice(0, 5) ? "#004B71" : "#F3F2F5",
-                                              color: time.from.slice(0, 5) === el.from.slice(0, 5) ? "#fff" : "#000",
-                                              px: 6,
-                                              py: 0.5,
-                                            },
-                                          }}
-                                          onClick={() => setTime(el)}
-                                        />
-                                      ))}
-                                </RadioGroup>
-                                <Typography sx={{ py: 1 }}>{t("bookingDialog.step1.night")}</Typography>
-                                <RadioGroup sx={{ display: "flex", flexDirection: "row", gap: 1, "[dir=ltr] &": { px: 1 } }}>
-                                  {dateType0 &&
-                                    data[Object.keys(data).filter((key) => key.slice(0, 10) === dateType0)[0]]
-                                      .filter((ele: any) => ele.shift === 1)
-                                      .map((el: any, index: number) => (
-                                        <FormControlLabel
-                                          key={index}
-                                          name="time"
-                                          control={<Radio sx={{ display: "none" }} name={el.from.slice(0, 5)} />}
-                                          label={el.from.slice(0, 5)}
-                                          sx={{
-                                            userSelect: "none",
-                                            "& span": {
-                                              fontSize: { xs: "12px", sm: "16px" },
-                                              borderRadius: "100px",
-                                              // color: "#FFF",
-                                              backgroundColor: time.from.slice(0, 5) === el.from.slice(0, 5) ? "#004B71" : "#F3F2F5",
-                                              color: time.from.slice(0, 5) === el.from.slice(0, 5) ? "#fff" : "#000",
-                                              px: 6,
-                                              py: 0.5,
-                                            },
-                                          }}
-                                          onClick={() => setTime(el)}
-                                        />
-                                      ))}
-                                </RadioGroup>
-                              </Box>
-                            )}
-
-                            {BOOKINGKIND === 0 && (
-                              <Button
-                                disabled={!dateType0}
-                                variant="contained"
-                                color="primary"
-                                sx={{ alignSelf: "center", my: 2, p: { xs: "8px 64px 8px 64px", md: "15px 160px 15px 160px" } }}
-                                onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)}
-                              >
-                                {mobile < 600 ? t("bookingDialog.confirm") : `${t("bookingDialog.step1.book")}: ${dateType0}`}
-                              </Button>
-                            )}
-                            {BOOKINGKIND === 1 && (
-                              <Button
-                                disabled={!dateType0 || !time.from}
-                                variant="contained"
-                                color="primary"
-                                sx={{ alignSelf: "center", my: 2, p: { xs: "8px 64px 8px 64px", md: "15px 160px 15px 160px" } }}
-                                onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)}
-                              >
-                                {mobile < 600
-                                  ? t("bookingDialog.confirm")
-                                  : `${t("bookingDialog.step1.book")}: ${dateType0} - ${time.from.slice(0, 5)}`}
-                              </Button>
-                            )}
-                          </>
+                          {(BOOKINGKIND === 1 || DOCID == "") && (
+                            <Box sx={{ p: 2 }}>
+                              <Typography sx={{ py: 1 }}>{t("bookingDialog.step1.morning")}</Typography>
+                              <RadioGroup sx={{ display: "flex", flexDirection: "row", gap: 1, "[dir=ltr] &": { px: 1 } }}>
+                                {dateType0 &&
+                                  data[Object.keys(data).filter((key) => key.slice(0, 10) === dateType0)[0]]
+                                    .filter((ele: any) => ele.shift === 0)
+                                    .map((el: any, index: number) => (
+                                      <FormControlLabel
+                                        key={index}
+                                        name="time"
+                                        control={<Radio sx={{ display: "none" }} name={el.from.slice(0, 5)} />}
+                                        label={el.from.slice(0, 5)}
+                                        sx={{
+                                          userSelect: "none",
+                                          "& span": {
+                                            fontSize: { xs: "12px", sm: "16px" },
+                                            borderRadius: "100px",
+                                            // color: "#FFF",
+                                            backgroundColor: time.from.slice(0, 5) === el.from.slice(0, 5) ? "#004B71" : "#F3F2F5",
+                                            color: time.from.slice(0, 5) === el.from.slice(0, 5) ? "#fff" : "#000",
+                                            px: 6,
+                                            py: 0.5,
+                                          },
+                                        }}
+                                        onClick={() => setTime(el)}
+                                      />
+                                    ))}
+                              </RadioGroup>
+                              <Typography sx={{ py: 1 }}>{t("bookingDialog.step1.night")}</Typography>
+                              <RadioGroup sx={{ display: "flex", flexDirection: "row", gap: 1, "[dir=ltr] &": { px: 1 } }}>
+                                {dateType0 &&
+                                  data[Object.keys(data).filter((key) => key.slice(0, 10) === dateType0)[0]]
+                                    .filter((ele: any) => ele.shift === 1)
+                                    .map((el: any, index: number) => (
+                                      <FormControlLabel
+                                        key={index}
+                                        name="time"
+                                        control={<Radio sx={{ display: "none" }} name={el.from.slice(0, 5)} />}
+                                        label={el.from.slice(0, 5)}
+                                        sx={{
+                                          userSelect: "none",
+                                          "& span": {
+                                            fontSize: { xs: "12px", sm: "16px" },
+                                            borderRadius: "100px",
+                                            // color: "#FFF",
+                                            backgroundColor: time.from.slice(0, 5) === el.from.slice(0, 5) ? "#004B71" : "#F3F2F5",
+                                            color: time.from.slice(0, 5) === el.from.slice(0, 5) ? "#fff" : "#000",
+                                            px: 6,
+                                            py: 0.5,
+                                          },
+                                        }}
+                                        onClick={() => setTime(el)}
+                                      />
+                                    ))}
+                              </RadioGroup>
+                            </Box>
+                          )}
+                          {BOOKINGKIND === 0 && (
+                            <Button
+                              disabled={!dateType0}
+                              variant="contained"
+                              color="primary"
+                              sx={{ alignSelf: "center", my: 2, p: { xs: "8px 64px 8px 64px", md: "15px 160px 15px 160px" } }}
+                              onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)}
+                            >
+                              {mobile < 600 ? t("bookingDialog.confirm") : `${t("bookingDialog.step1.book")}: ${dateType0}`}
+                            </Button>
+                          )}
+                          {(BOOKINGKIND === 1 || DOCID == "") && (
+                            <Button
+                              disabled={!dateType0 || !time.from}
+                              variant="contained"
+                              color="primary"
+                              sx={{ alignSelf: "center", my: 2, p: { xs: "8px 64px 8px 64px", md: "15px 160px 15px 160px" } }}
+                              onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)}
+                            >
+                              {mobile < 600
+                                ? t("bookingDialog.confirm")
+                                : `${t("bookingDialog.step1.book")}: ${dateType0} - ${time.from.slice(0, 5)}`}
+                            </Button>
+                          )}
                         </>
                       )}
                       {BOOKINGTYPE === 1 && (
@@ -564,7 +495,7 @@ export default function BookingDialog({ open, onClose, locale }: BookingDialogPr
                               سيتم حجز الموعد بتاريخ {dateType1}
                             </Typography>
                           </Box>
-                          {BOOKINGKIND === 1 && (
+                          {(BOOKINGKIND === 1 || DOCID == "") && (
                             <>
                               {dateType1 ? (
                                 <Box sx={{ p: 2 }}>
@@ -630,7 +561,7 @@ export default function BookingDialog({ open, onClose, locale }: BookingDialogPr
                                   </RadioGroup>
                                 </Box>
                               ) : (
-                                "no appoitments"
+                                <Typography>لايوجد مواعيد</Typography>
                               )}
                             </>
                           )}
@@ -648,7 +579,7 @@ export default function BookingDialog({ open, onClose, locale }: BookingDialogPr
                               </Button>
                             </Box>
                           )}
-                          {BOOKINGKIND === 1 && (
+                          {(BOOKINGKIND === 1 || DOCID == "") && (
                             <Button
                               fullWidth={mobile < 600 ? true : false}
                               disabled={!time.from}
@@ -694,7 +625,7 @@ export default function BookingDialog({ open, onClose, locale }: BookingDialogPr
                       id: "",
                       name: "",
                       phoneNumber: "",
-                      birthdate: dayjs().toISOString(),
+                      birthdate: dayjs(),
                       gender: 0,
                       address: "",
                       wayKnowClinicId: null,
@@ -703,7 +634,7 @@ export default function BookingDialog({ open, onClose, locale }: BookingDialogPr
                     onSubmit={async (values) => {
                       console.log(values);
                       axios
-                        .get(apiRoutes.website.CheckPatient(values.name, values.phoneNumber, values.birthdate))
+                        .get(apiRoutes.website.CheckPatient(values.name, values.phoneNumber, values.birthdate.toISOString()))
                         .then((res) => {
                           patientId.current = res.data.data.id;
                           handleNext();
@@ -751,11 +682,10 @@ export default function BookingDialog({ open, onClose, locale }: BookingDialogPr
                                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                       sx={{ width: "100%", "& input": { py: 1 } }}
-                                      value={birthdate}
+                                      value={values.birthdate}
                                       onChange={(newValue) => setFieldValue("birthdate", newValue!.toISOString())}
                                     />
                                   </LocalizationProvider>
-                                  {errors.birthdate && <Typography>{errors.birthdate}</Typography>}
                                 </Box>
                               </Box>
                               <Box>
@@ -862,14 +792,25 @@ export default function BookingDialog({ open, onClose, locale }: BookingDialogPr
                   <Formik
                     // validationSchema={schema}
                     enableReinitialize
-                    initialValues={{
-                      from: BOOKINGKIND === 0 ? Object.keys(data)[0] : `${dateType0}T${time.from}`,
-                      doctorId: DOCID,
-                      serviceId: SERVICEID,
-                      patientId: patientId.current,
-                      complaint: "",
-                      otp: "",
-                    }}
+                    initialValues={
+                      DOCID
+                        ? {
+                            from: BOOKINGKIND === 0 ? Object.keys(data)[0] : `${dateType0}T${time.from}`,
+                            doctorId: DOCID,
+                            serviceId: SERVICEID,
+                            patientId: patientId.current,
+                            complaint: "",
+                            otp: "",
+                          }
+                        : {
+                            from: BOOKINGKIND === 0 ? Object.keys(data)[0] : `${dateType0}T${time.from}`,
+                            roomId: time.roomId,
+                            serviceId: SERVICEID,
+                            patientId: patientId.current,
+                            complaint: "",
+                            otp: "",
+                          }
+                    }
                     onSubmit={async (values, { setSubmitting }) => {
                       console.log(values);
                       axios

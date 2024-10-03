@@ -39,24 +39,22 @@ export default function BookingAnAppointment({ params: { locale } }: any) {
   };
 
   const handleNext = (docId?: string, servId?: string) => {
+    console.log("activeStep", activeStep);
     doctorId.current = docId;
     serviceId.current = servId;
-    console.log(docId);
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
-    }
+    // let newSkipped = skipped;
     if (typeof docId === "string") {
       params.set("doctorId", docId);
     }
     if (typeof servId === "string") {
       params.set("serviceId", servId);
     }
-    params.set("step", (activeStep + 1).toString());
-    push(`${pathname}?${params.toString()}`);
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
+    if (Number(params.get("step")) !== 2) {
+      params.set("step", (activeStep + 1).toString());
+      push(`${pathname}?${params.toString()}`);
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    }
+    // setSkipped(newSkipped);
   };
 
   const handleBack = () => {
@@ -83,7 +81,7 @@ export default function BookingAnAppointment({ params: { locale } }: any) {
   return (
     <Box>
       <Box sx={{ width: "100%", minHeight: "600px" }}>
-        {activeStep === steps.length - 1 ? (
+        {activeStep === 2 ? (
           <DoctorInformation locale={locale} doctorId={doctorId.current} serviceId={serviceId.current} />
         ) : (
           <Container sx={{ marginTop: 4 }}>

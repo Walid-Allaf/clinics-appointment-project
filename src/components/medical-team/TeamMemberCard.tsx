@@ -7,7 +7,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export default function TeamMemberCard(props: any) {
-  const { id, name, description, specialty, specialtyImg, teamMemberImg, locale, next } = props;
+  const { id, name, description, specialty, specialtyImg, teamMemberImg, locale, next, openBooking } = props;
   const { t } = useTranslation();
 
   return (
@@ -41,14 +41,10 @@ export default function TeamMemberCard(props: any) {
       >
         <Box
           sx={{
-            "& img": { /*width: "100%", height: "auto",*/ position: "relative", bottom: "-5px", zIndex: 2 /*aspectRatio: "1 / 1.2"*/ },
+            "& img": { position: "relative", bottom: "-5px", zIndex: 2 /*aspectRatio: "1 / 1.2"*/ },
             px: 2,
           }}
         >
-          {/* {typeof teamMemberImg === "string" ? (
-          ) : (
-            <Image src={teamMemberImg} alt="team-member-img" />
-          )} */}
           <Img imageData={teamMemberImg} width={0} height={0} />
         </Box>
       </Box>
@@ -100,41 +96,42 @@ export default function TeamMemberCard(props: any) {
           {description}
         </Typography>
 
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          {next ? (
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => next(id)}
-              sx={{
-                color: "#004B71",
-                // width: "auto",
-                width: "100%",
-                // display: "flex",
-                // alignItems: "center",
-                // justifyContent: "center",
-                // gap: 1,
-                borderRadius: "100px",
-                textDecoration: "none",
-                p: {
-                  xs: "14px 40px 14px 40px",
-                  lg: "14px 30px 14px 30px",
-                },
-                textWrap: "nowrap",
-                cursor: "pointer",
-                transition: ".3s ease-out",
-                // background: "#3FBDE6",
-                // "&:hover": {
-                //   background: "#3fbde6bb",
-                // },
-                boxShadow: " 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12)",
-                position: "relative",
-                zIndex: 99,
-              }}
-            >
-              <Typography sx={{ fontSize: "18px", fontWeight: 500, lineHeight: "20.09px" }}>{t("viewProfile")}</Typography>
-              {locale == "en" ? <ArrowForwardIcon htmlColor={"#004B71"} /> : <ArrowBackIcon htmlColor={"#004B71"} />}
-            </Button>
+        <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", gap: 1 }}>
+          {true ? (
+            <>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => next(id)}
+                sx={{
+                  color: "#004B71",
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 1,
+                  borderRadius: "100px",
+                  textDecoration: "none",
+                  p: {
+                    xs: "14px 40px 14px 40px",
+                    lg: "14px 30px 14px 30px",
+                  },
+                  textWrap: "nowrap",
+                  cursor: "pointer",
+                  transition: ".3s ease-out",
+                  boxShadow:
+                    " 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12)",
+                  position: "relative",
+                  zIndex: 99,
+                }}
+              >
+                <Typography sx={{ fontSize: "18px", fontWeight: 500, lineHeight: "20.09px" }}>{t("viewProfile")}</Typography>
+                {locale == "en" ? <ArrowForwardIcon htmlColor={"#004B71"} /> : <ArrowBackIcon htmlColor={"#004B71"} />}
+              </Button>
+              <Button fullWidth onClick={openBooking} variant="contained" color="secondary">
+                {t("doctorDetailes.bookAppointment")}
+              </Button>
+            </>
           ) : (
             <SpecialLink
               href="/booking-an-appointment"

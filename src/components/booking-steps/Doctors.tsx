@@ -18,17 +18,16 @@ export default function Doctors({ locale, next, serviceId }: any) {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [doctors, setDoctors] = React.useState<AllDoctor>();
 
-  const getDoctors = () => {
+  const getDoctors = async () => {
     setLoading(true);
-    axios
+    await axios
       .get(apiRoutes.website.GetAllDoctor(params.get("serviceId") || serviceId || ""))
       .then((response: AxiosResponse<AllDoctor, any>) => {
         setDoctors(response.data);
-        console.log(response.data);
-        setLoading(false);
-        if (doctors?.data.results.length === 1) {
-          next(doctors?.data.results[0].id);
+        if (response.data.data.results.length === 1) {
+          next(response.data.data.results[0].id);
         }
+        setLoading(false);
       })
       .catch((error) => {
         console.error(error.message);
@@ -66,24 +65,32 @@ export default function Doctors({ locale, next, serviceId }: any) {
               doctors?.data.results.map((item) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
                   <Box
-                    onClick={() =>
-                      setOpen({
-                        open: true,
-                        doctorId: item.id,
-                        bookingKind: item.bookingKind,
-                        serviceId: params.get("serviceId") || serviceId || "",
-                      })
-                    }
-                    sx={{ cursor: "pointer" }}
+                  // onClick={() =>
+                  //   setOpen({
+                  //     open: true,
+                  //     doctorId: item.id,
+                  //     bookingKind: item.bookingKind,
+                  //     serviceId: params.get("serviceId") || serviceId || "",
+                  //   })
+                  // }
+                  // sx={{ cursor: "pointer" }}
                   >
                     <TeamMemberCard
                       name={item.name || ""}
-                      description={locale === "ar" ? item.description : item.descriptionEn}
+                      description={locale === "ar" ? item.simpleDescription : item.simpleDescriptionEn}
                       specialty={locale === "ar" ? item.name : item.name}
                       specialtyImg={SPECIALTYIMAGE1}
                       teamMemberImg={item.image}
                       locale={locale}
                       next={() => next(item.id)}
+                      openBooking={() => {
+                        setOpen({
+                          open: true,
+                          doctorId: item.id,
+                          bookingKind: item.bookingKind,
+                          serviceId: params.get("serviceId") || serviceId || "",
+                        });
+                      }}
                     />
                   </Box>
                 </Grid>
