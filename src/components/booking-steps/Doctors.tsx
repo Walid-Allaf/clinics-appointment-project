@@ -25,7 +25,7 @@ export default function Doctors({ locale, next, serviceId }: any) {
       .then((response: AxiosResponse<AllDoctor, any>) => {
         setDoctors(response.data);
         if (response.data.data.results.length === 1) {
-          next(response.data.data.results[0].id);
+          next(response.data.data.results[0].id, params.get("serviceId") || serviceId || "");
         }
         setLoading(false);
       })

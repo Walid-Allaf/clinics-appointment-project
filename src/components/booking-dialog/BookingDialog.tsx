@@ -682,8 +682,8 @@ export default function BookingDialog({ open, onClose, locale }: BookingDialogPr
                                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                       sx={{ width: "100%", "& input": { py: 1 } }}
-                                      value={values.birthdate}
-                                      onChange={(newValue) => setFieldValue("birthdate", newValue!.toISOString())}
+                                      value={dayjs(values.birthdate)}
+                                      onChange={(newValue) => setFieldValue("birthdate", newValue)}
                                     />
                                   </LocalizationProvider>
                                 </Box>
@@ -812,7 +812,7 @@ export default function BookingDialog({ open, onClose, locale }: BookingDialogPr
                           }
                     }
                     onSubmit={async (values, { setSubmitting }) => {
-                      console.log(values);
+                      console.log("AddAppointment", values);
                       axios
                         .post(apiRoutes.website.AddAppointment, values)
                         .then((res) => {

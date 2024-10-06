@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { match as matchLocale } from "@formatjs/intl-localematcher";
 import Negotiator from "negotiator";
 import i18nConfig from "../i18nConfig";
+import Cookie from "js-cookie";
 
 const locales = i18nConfig.locales;
 
@@ -29,13 +30,12 @@ function getLocale(request) {
   const languages = new Negotiator(negotiatorHeaders).languages(locales);
 
   // Intl.LocaleMatcher
-  const locale = matchLocale(languages, locales, i18nConfig.defaultLocale);
-
-  return locale;
+  return matchLocale(languages, locales, i18nConfig.defaultLocale);
 }
 
 export function middleware(request) {
   const locale = getLocale(request);
+  Cookie.set("NEXT_LOCALE", locale);
 
   // Redirect to detected language
   if (locale && !request.nextUrl.pathname.startsWith(`/${locale}`)) {
