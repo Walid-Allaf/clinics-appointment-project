@@ -114,6 +114,13 @@ export default function BookingDialog({ open, onClose, locale }: BookingDialogPr
   const handleReset = () => {
     setActiveStep(0);
   };
+  const [location, setLocation] = useState("");
+  const getClinicLocation = async () => {
+    await axios
+      .get(apiRoutes.website.GetMedicalCenterInfo)
+      .then((response) => setLocation(response.data.data.clinicMapUrl))
+      .catch((err) => toast.error(err.response.data.message));
+  };
 
   const getAvailableAppointmentCount = async () => {
     setLoading(true);
@@ -345,11 +352,7 @@ export default function BookingDialog({ open, onClose, locale }: BookingDialogPr
                 </Box>
               </Grid>
               <Grid item xs={12} sm={7} md={8} lg={9} sx={{ "& iframe": { minHeight: { xs: "500px", sm: "100%" } }, minHeight: "500px" }}>
-                <iframe
-                  src="https://maps.google.com/maps?q=36.19980587168142,37.16299669311489&z=16&output=embed"
-                  height="100%"
-                  width="100%"
-                ></iframe>
+                <iframe src={location} height="100%" width="100%"></iframe>
               </Grid>
             </Grid>
           </Box>
@@ -795,7 +798,7 @@ export default function BookingDialog({ open, onClose, locale }: BookingDialogPr
                     initialValues={
                       DOCID
                         ? {
-                            from: BOOKINGKIND === 0 ? Object.keys(data)[0] : `${dateType0}T${time.from}`,
+                            from: BOOKINGKIND === 0 ? `${dateType0}T00:00:00` : `${dateType0}T${time.from}`,
                             doctorId: DOCID,
                             serviceId: SERVICEID,
                             patientId: patientId.current,
@@ -803,7 +806,7 @@ export default function BookingDialog({ open, onClose, locale }: BookingDialogPr
                             otp: "",
                           }
                         : {
-                            from: BOOKINGKIND === 0 ? Object.keys(data)[0] : `${dateType0}T${time.from}`,
+                            from: BOOKINGKIND === 0 ? `${dateType0}T00:00:00` : `${dateType0}T${time.from}`,
                             roomId: time.roomId,
                             serviceId: SERVICEID,
                             patientId: patientId.current,

@@ -9,7 +9,7 @@ import { AllClinic, AllDoctor, AllSpecialty, MedicalCenterInfo } from "@/src/api
 async function getMedicalInfo() {
   let res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api${apiRoutes.website.GetMedicalCenterInfo}`, {
     headers: { "Content-Type": "application/json", key: `${process.env.NEXT_PUBLIC_BASE_KEY}` },
-    cache: "force-cache",
+    cache: "no-cache",
   });
   let data: MedicalCenterInfo = await res.json();
   if (!data) notFound();
@@ -18,7 +18,7 @@ async function getMedicalInfo() {
 async function getServices() {
   let res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api${apiRoutes.website.GetAllServices}`, {
     headers: { "Content-Type": "application/json", key: `${process.env.NEXT_PUBLIC_BASE_KEY}` },
-    cache: "force-cache",
+    cache: "no-cache",
   });
   let data: AllSpecialty = await res.json();
   if (!data) notFound();
@@ -27,7 +27,7 @@ async function getServices() {
 async function getDoctors() {
   let res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api${apiRoutes.website.GetAllDoctor("")}`, {
     headers: { "Content-Type": "application/json", key: `${process.env.NEXT_PUBLIC_BASE_KEY}` },
-    cache: "force-cache",
+    cache: "no-cache",
   });
   let data: AllDoctor = await res.json();
   if (!data) notFound();
