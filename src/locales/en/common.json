@@ -40,6 +40,7 @@
     "step2.lastname": "Last Name",
     "step2.gender": "Gender",
     "step2.address": "Address",
+    "step2.complaint": "Complaint",
     "step2.birthdate": "Date of birth",
     "step2.howYouKnowUs": "How did you learn about our clinic ?",
     "step3": "Verification Code",
@@ -53,7 +54,8 @@
     "step4.time": "Time",
     "step4.info": "CONTACT DETAILS",
     "step4.addToCalendar": "Add To Calendar",
-    "step4.agree": "OK"
+    "step4.agree": "OK",
+    "success": "The appointment has been successfully booked"
   },
   "clinicsPage": {
     "title": "Choose Your Location"

@@ -30,7 +30,8 @@ function getLocale(request) {
   const languages = new Negotiator(negotiatorHeaders).languages(locales);
 
   // Intl.LocaleMatcher
-  return matchLocale(languages, locales, i18nConfig.defaultLocale);
+  console.log("languages", languages, locales, i18nConfig.defaultLocale);
+  return matchLocale(locales, i18nConfig.defaultLocale, languages);
 }
 
 export function middleware(request) {

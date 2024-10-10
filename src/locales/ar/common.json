@@ -40,6 +40,7 @@
     "step2.lastname": "الاسم العائلة",
     "step2.gender": "الجنس",
     "step2.address": "عنوان السكن",
+    "step2.complaint": "الشكاية",
     "step2.birthdate": "تاريخ الميلاد",
     "step2.howYouKnowUs": "كيف تعرفت على عيادتنا ؟",
     "step3": "رمز التحقق",
@@ -53,7 +54,8 @@
     "step4.time": "الوقت",
     "step4.info": "تفاصيل الاتصال",
     "step4.addToCalendar": "اضافة الى التقويم",
-    "step4.agree": "موافق"
+    "step4.agree": "موافق",
+    "success": "تم حجز الموعد بنجاح"
   },
   "clinicsPage": {
     "title": "اختر فرع العيادة"
